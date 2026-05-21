@@ -1,0 +1,59 @@
+version: '3.9'
+
+services:
+
+  web:
+    build: .
+    container_name: stimulate_web
+
+    command: gunicorn stimulate.wsgi:application --bind 0.0.0.0:8000
+
+    volumes:
+      - .:/app
+
+    ports:
+      - "8000:8000"
+
+    env_file:
+      - .env
+
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:latest
+    container_name: stimulate_redis
+
+    ports:
+      - "6379:6379"
+
+  celery:
+    build: .
+    container_name: stimulate_celery
+
+    command: celery -A stimulate worker -l info
+
+    volumes:
+      - .:/app
+
+    env_file:
+      - .env
+
+    depends_on:
+      - redis
+      - web
+
+  celery-beat:
+    build: .
+    container_name: stimulate_beat
+
+    command: celery -A stimulate beat -l info
+
+    volumes:
+      - .:/app
+
+    env_file:
+      - .env
+
+    depends_on:
+      - redis

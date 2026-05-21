@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STIMULATE BULK SMS SYSTEM  - Dashboard</title>
+    <!-- Include Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Configure Tailwind for Dark Mode -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4F46E5', // Indigo 600
+                        secondary: '#10B981', // Emerald 500
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Include Alpine.js for lightweight interactions -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Include Chart.js for analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        [x-cloak] { display: none !important; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans antialiased transition-colors duration-200 dark:bg-gray-900 dark:text-gray-200" x-data="{ sidebarOpen: false, darkMode: false, currentTab: 'dashboard' }" x-init="darkMode = localStorage.getItem('theme') === 'dark' ? true : false; $watch('darkMode', val => localStorage.setItem('theme', val ? 'dark' : 'light'))" :class="{ 'dark': darkMode }">
+
+    <!-- Top Navigation -->
+    <nav class="bg-white border-b border-gray-200 fixed z-30 w-full dark:bg-gray-800 dark:border-gray-700">
+        <div class="px-3 py-3 lg:px-5 lg:pl-3">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center justify-start">
+                    <button @click="sidebarOpen = !sidebarOpen" aria-expanded="true" aria-controls="sidebar" class="lg:hidden mr-2 text-gray-600 hover:text-gray-900 cursor-pointer p-2 hover:bg-gray-100 focus:bg-gray-100 focus:ring-2 focus:ring-gray-100 rounded dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                   {% load static %}
+
+<a href="#" class="flex items-center lg:ml-2.5">
+    <img src="{% static 'images/logo.png' %}"
+         alt="Logo"
+         class="h-14 w-auto">
+</a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <!-- Dark Mode Toggle -->
+                    <button @click="darkMode = !darkMode" class="text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline-none rounded-lg p-2">
+                        <i class="fa-solid fa-moon text-lg" x-show="!darkMode"></i>
+                        <i class="fa-solid fa-sun text-lg" x-show="darkMode" x-cloak></i>
+                    </button>
+                    <!-- Role Badge -->
+                    <span class="hidden md:inline-flex items-center bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">
+                        Admin
+                    </span>
+                    <!-- User Profile -->
+                    <div class="relative" x-data="{ userMenuOpen: false }">
+                        <button @click="userMenuOpen = !userMenuOpen" @click.away="userMenuOpen = false" class="flex items-center gap-2 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600">
+                            <img class="w-8 h-8 rounded-full" src="https://ui-avatars.com/api/?name=User&background=4F46E5&color=fff" alt="user photo">
+                        </button>
+                        <!-- Dropdown -->
+                        <div x-show="userMenuOpen" x-cloak class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5 z-50 dark:bg-gray-700 dark:divide-gray-600">
+                            <div class="px-4 py-3 border-b border-gray-100 dark:border-gray-600">
+                                <p class="text-sm text-gray-900 dark:text-white">Magnificati Noel</p>
+                                <p class="text-sm font-medium text-gray-500 truncate dark:text-gray-400">admin@smspro.com</p>
+                            </div>
+                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white">Settings</a>
+                            <a href="#" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:text-red-400 dark:hover:bg-gray-600 dark:hover:text-white">Sign out</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="flex pt-16 overflow-hidden bg-gray-50 dark:bg-gray-900">
+
+        <!-- Sidebar -->
+        <aside id="sidebar" class="fixed z-20 h-full top-0 left-0 pt-16 flex lg:flex flex-shrink-0 flex-col w-64 transition-transform duration-300 bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700" :class="{ 'translate-x-0': sidebarOpen, '-translate-x-full lg:translate-x-0': !sidebarOpen }">
+            <div class="relative flex-1 flex flex-col min-h-0 border-r border-gray-200 dark:border-gray-700 pt-0">
+                <div class="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
+                    <div class="flex-1 px-3 space-y-1 bg-white dark:bg-gray-800">
+                        <ul class="space-y-2 pb-2">
+                            <li>
+                                <a href="#" @click.prevent="currentTab = 'dashboard'; sidebarOpen = false" :class="{ 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white': currentTab === 'dashboard', 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700': currentTab !== 'dashboard' }" class="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 group transition-colors">
+                                    <i class="fa-solid fa-chart-line w-6 text-center text-gray-500 group-hover:text-gray-900 transition duration-75 dark:text-gray-400 dark:group-hover:text-white"></i>
+                                    <span class="ml-3">Dashboard Analytics</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" @click.prevent="currentTab = 'campaigns'; sidebarOpen = false" :class="{ 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white': currentTab === 'campaigns', 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700': currentTab !== 'campaigns' }" class="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 group transition-colors">
+                                    <i class="fa-solid fa-bullhorn w-6 text-center text-gray-500 group-hover:text-gray-900 transition duration-75 dark:text-gray-400 dark:group-hover:text-white"></i>
+                                    <span class="ml-3">Campaigns</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" @click.prevent="currentTab = 'send-sms'; sidebarOpen = false" :class="{ 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white': currentTab === 'send-sms', 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700': currentTab !== 'send-sms' }" class="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 group transition-colors">
+                                    <i class="fa-solid fa-paper-plane w-6 text-center text-gray-500 group-hover:text-gray-900 transition duration-75 dark:text-gray-400 dark:group-hover:text-white"></i>
+                                    <span class="ml-3">Send SMS</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" @click.prevent="currentTab = 'contacts'; sidebarOpen = false" :class="{ 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white': currentTab === 'contacts', 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700': currentTab !== 'contacts' }" class="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 group transition-colors">
+                                    <i class="fa-solid fa-address-book w-6 text-center text-gray-500 group-hover:text-gray-900 transition duration-75 dark:text-gray-400 dark:group-hover:text-white"></i>
+                                    <span class="ml-3">Contacts</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" @click.prevent="currentTab = 'reports'; sidebarOpen = false" :class="{ 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white': currentTab === 'reports', 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700': currentTab !== 'reports' }" class="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 group transition-colors">
+                                    <i class="fa-solid fa-file-invoice w-6 text-center text-gray-500 group-hover:text-gray-900 transition duration-75 dark:text-gray-400 dark:group-hover:text-white"></i>
+                                    <span class="ml-3">Delivery Reports</span>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="space-y-2 pt-2 border-t border-gray-200 dark:border-gray-700">
+                            <a href="#" @click.prevent="currentTab = 'billing'; sidebarOpen = false" :class="{ 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white': currentTab === 'billing', 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700': currentTab !== 'billing' }" class="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 group transition-colors">
+                                <i class="fa-solid fa-credit-card w-6 text-center text-gray-500 group-hover:text-gray-900 transition duration-75 dark:text-gray-400 dark:group-hover:text-white"></i>
+                                <span class="ml-3">Billing System</span>
+                            </a>
+                            <a href="#" @click.prevent="currentTab = 'api'; sidebarOpen = false" :class="{ 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white': currentTab === 'api', 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700': currentTab !== 'api' }" class="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 group transition-colors">
+                                <i class="fa-solid fa-code w-6 text-center text-gray-500 group-hover:text-gray-900 transition duration-75 dark:text-gray-400 dark:group-hover:text-white"></i>
+                                <span class="ml-3">API Integration</span>
+                            </a>
+                            <a href="#" @click.prevent="currentTab = 'roles'; sidebarOpen = false" :class="{ 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white': currentTab === 'roles', 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700': currentTab !== 'roles' }" class="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 group transition-colors">
+                                <i class="fa-solid fa-users-cog w-6 text-center text-gray-500 group-hover:text-gray-900 transition duration-75 dark:text-gray-400 dark:group-hover:text-white"></i>
+                                <span class="ml-3">User Roles</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Overlay for mobile sidebar -->
+        <div x-show="sidebarOpen" class="bg-gray-900 bg-opacity-50 fixed inset-0 z-10 lg:hidden" @click="sidebarOpen = false"></div>
+
+        <!-- Main Content Area -->
+        <div id="main-content" class="h-full w-full bg-gray-50 relative overflow-y-auto lg:ml-64 dark:bg-gray-900 min-h-screen">
+            <main class="pt-6 px-4 pb-24 lg:px-8">
+                
+                <!-- ==================== DASHBOARD & ANALYTICS ==================== -->
+                <div x-show="currentTab === 'dashboard'">
+                    <div class="mb-6 flex justify-between items-center">
+                        <h1 class="text-2xl font-semibold text-gray-900 dark:text-white">Overview</h1>
+                        <button class="bg-primary hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg transition-colors text-sm" @click="currentTab = 'send-sms'">
+                            <i class="fa-solid fa-plus mr-1"></i> Quick Send
+                        </button>
+                    </div>
+
+                    <!-- Stats Cards -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                        <div class="bg-white rounded-lg shadow-sm p-5 border border-gray-100 dark:bg-gray-800 dark:border-gray-700">
+                            <div class="flex items-center">
+                                <div class="inline-flex flex-shrink-0 justify-center items-center w-12 h-12 text-primary bg-indigo-100 rounded-lg dark:bg-indigo-900 dark:text-indigo-300">
+                                    <i class="fa-solid fa-paper-plane text-xl"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <span class="block text-sm font-medium text-gray-500 dark:text-gray-400">Total Sent</span>
+                                    <span class="block text-2xl font-semibold text-gray-900 dark:text-white">124,592</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-lg shadow-sm p-5 border border-gray-100 dark:bg-gray-800 dark:border-gray-700">
+                            <div class="flex items-center">
+                                <div class="inline-flex flex-shrink-0 justify-center items-center w-12 h-12 text-green-600 bg-green-100 rounded-lg dark:bg-green-900 dark:text-green-300">
+                                    <i class="fa-solid fa-check-double text-xl"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <span class="block text-sm font-medium text-gray-500 dark:text-gray-400">Delivered</span>
+                                    <span class="block text-2xl font-semibold text-gray-900 dark:text-white">98.2%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-lg shadow-sm p-5 border border-gray-100 dark:bg-gray-800 dark:border-gray-700">
+                            <div class="flex items-center">
+                                <div class="inline-flex flex-shrink-0 justify-center items-center w-12 h-12 text-yellow-600 bg-yellow-100 rounded-lg dark:bg-yellow-900 dark:text-yellow-300">
+                                    <i class="fa-solid fa-bullhorn text-xl"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <span class="block text-sm font-medium text-gray-500 dark:text-gray-400">Active Campaigns</span>
+                                    <span class="block text-2xl font-semibold text-gray-900 dark:text-white">12</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-lg shadow-sm p-5 border border-gray-100 dark:bg-gray-800 dark:border-gray-700">
+                            <div class="flex items-center">
+                                <div class="inline-flex flex-shrink-0 justify-center items-center w-12 h-12 text-purple-600 bg-purple-100 rounded-lg dark:bg-purple-900 dark:text-purple-300">
+                                    <i class="fa-solid fa-wallet text-xl"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <span class="block text-sm font-medium text-gray-500 dark:text-gray-400">Credit Balance</span>
+                                    <span class="block text-2xl font-semibold text-gray-900 dark:text-white">$452.50</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Charts Area -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+                        <div class="bg-white rounded-lg shadow-sm p-5 border border-gray-100 dark:bg-gray-800 dark:border-gray-700">
+                            <h3 class="text-base font-semibold text-gray-900 mb-4 dark:text-white">Delivery Success Rate (Last 7 Days)</h3>
+                            <canvas id="deliveryChart" class="w-full h-64"></canvas>
+                        </div>
+                        <div class="bg-white rounded-lg shadow-sm p-5 border border-gray-100 dark:bg-gray-800 dark:border-gray-700">
+                            <h3 class="text-base font-semibold text-gray-900 mb-4 dark:text-white">Volume vs Cost</h3>
+                            <canvas id="costChart" class="w-full h-64"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== CAMPAIGNS CRUD ==================== -->
+                <div x-show="currentTab === 'campaigns'" x-cloak>
+                    <div class="mb-6 flex justify-between items-center">
+                        <div>
+                            <h1 class="text-2xl font-semibold text-gray-900 dark:text-white">Campaigns</h1>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Manage your bulk SMS campaigns</p>
+                        </div>
+                        <button class="bg-primary hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg transition-colors text-sm">
+                            <i class="fa-solid fa-plus mr-1"></i> Create Campaign
+                        </button>
+                    </div>
+
+                    <div class="bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 overflow-hidden">
+                        <div class="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center bg-gray-50 dark:bg-gray-800">
+                            <div class="relative w-64">
+                                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                    <i class="fa-solid fa-search text-gray-500 dark:text-gray-400"></i>
+                                </div>
+                                <input type="text" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder="Search campaigns...">
+                            </div>
+                            <div class="flex space-x-2">
+                                <select class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block p-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    <option>All Status</option>
+                                    <option>Active</option>
+                                    <option>Draft</option>
+                                    <option>Completed</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3">Campaign Name</th>
+                                        <th scope="col" class="px-6 py-3">Status</th>
+                                        <th scope="col" class="px-6 py-3">Recipients</th>
+                                        <th scope="col" class="px-6 py-3">Created</th>
+                                        <th scope="col" class="px-6 py-3 text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                        <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Holiday Promo 2024</td>
+                                        <td class="px-6 py-4">
+                                            <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Completed</span>
+                                        </td>
+                                        <td class="px-6 py-4">12,500</td>
+                                        <td class="px-6 py-4">Oct 24, 2023</td>
+                                        <td class="px-6 py-4 text-right space-x-2">
+                                            <button class="text-blue-600 dark:text-blue-500 hover:underline"><i class="fa-solid fa-eye"></i></button>
+                                            <button class="text-gray-600 dark:text-gray-400 hover:underline"><i class="fa-solid fa-pen"></i></button>
+                                            <button class="text-red-600 dark:text-red-500 hover:underline"><i class="fa-solid fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                        <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Weekend Flash Sale</td>
+                                        <td class="px-6 py-4">
+                                            <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">Active</span>
+                                        </td>
+                                        <td class="px-6 py-4">5,200</td>
+                                        <td class="px-6 py-4">Oct 26, 2023</td>
+                                        <td class="px-6 py-4 text-right space-x-2">
+                                            <button class="text-blue-600 dark:text-blue-500 hover:underline"><i class="fa-solid fa-eye"></i></button>
+                                            <button class="text-gray-600 dark:text-gray-400 hover:underline"><i class="fa-solid fa-pen"></i></button>
+                                            <button class="text-red-600 dark:text-red-500 hover:underline"><i class="fa-solid fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                        <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">New User Welcome</td>
+                                        <td class="px-6 py-4">
+                                            <span class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">Draft</span>
+                                        </td>
+                                        <td class="px-6 py-4">--</td>
+                                        <td class="px-6 py-4">Oct 27, 2023</td>
+                                        <td class="px-6 py-4 text-right space-x-2">
+                                            <button class="text-blue-600 dark:text-blue-500 hover:underline"><i class="fa-solid fa-eye"></i></button>
+                                            <button class="text-gray-600 dark:text-gray-400 hover:underline"><i class="fa-solid fa-pen"></i></button>
+                                            <button class="text-red-600 dark:text-red-500 hover:underline"><i class="fa-solid fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== SEND SMS ==================== -->
+                <div x-show="currentTab === 'send-sms'" x-cloak>
+                    <div class="mb-6">
+                        <h1 class="text-2xl font-semibold text-gray-900 dark:text-white">Send SMS</h1>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Compose and send messages instantly</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <!-- Compose Area -->
+                        <div class="lg:col-span-2 bg-white rounded-lg shadow-sm border border-gray-200 dark:bg-gray-800 dark:border-gray-700 p-6">
+                            <form>
+                                <div class="mb-4">
+                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Sender ID</label>
+                                    <select class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        <option>MyCompany</option>
+                                        <option>PromoAlert</option>
+                                    </select>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Recipients (Numbers or Contact Groups)</label>
+                                    <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder="e.g., +1234567890, Customers Group">
+                                </div>
+                                <div class="mb-4 relative" x-data="{ text: '' }">
+                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Message</label>
+                                    <textarea x-model="text" rows="5" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary focus:border-primary dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder="Type your message here..."></textarea>
+                                    <div class="mt-2 text-xs text-gray-500 dark:text-gray-400 flex justify-between">
+                                        <span>Use {name} for personalization</span>
+                                        <span :class="{'text-red-500': text.length > 160}">Characters: <span x-text="text.length"></span>/160 (1 SMS)</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between mt-6">
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" value="" class="sr-only peer">
+                                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-300 dark:peer-focus:ring-indigo-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
+                                        <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">Schedule for later</span>
+                                    </label>
+                                    <button type="button" class="text-white bg-primary hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none dark:focus:ring-indigo-800">
+                                        <i class="fa-solid fa-paper-plane mr-2"></i>Send Now
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        
+                        <!-- Preview Area -->
+                        <div class="bg-gray-100 rounded-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700 p-6 flex flex-col items-center justify-center">
+                            <h3 class="text-sm font-medium text-gray-500 mb-4 dark:text-gray-400 w-full text-left">Mobile Preview</h3>
+                            <!-- Mock Phone -->
+                            <div class="relative w-[250px] h-[500px] bg-white dark:bg-gray-900 border-8 border-gray-800 rounded-[2.5rem] shadow-xl overflow-hidden flex flex-col">
+                                <div class="w-full h-12 bg-gray-100 dark:bg-gray-800 flex items-center justify-center border-b dark:border-gray-700">
+                                    <span class="text-xs font-semibold dark:text-white">MyCompany</span>
+                                </div>
+                                <div class="flex-1 p-4 bg-gray-50 dark:bg-gray-900 overflow-y-auto">
+                                    <!-- Mock Message -->
+                                    <div class="bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg rounded-tl-none p-3 text-sm shadow-sm inline-block max-w-[85%] float-left">
+                                        Your preview message will appear here. It shows exactly how it looks to the recipient.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== CONTACTS (CSV UPLOAD) ==================== -->
+                <div x-show="currentTab === 'contacts'" x-cloak>
+                    <div class="mb-6 flex justify-between items-center">
+                        <div>
+                            <h1 class="text-2xl font-semibold text-gray-900 dark:text-white">Contacts</h1>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Manage address books and import lists</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <!-- Upload Card -->
+                        <div class="bg-white rounded-lg shadow-sm border border-dashed border-gray-300 dark:bg-gray-800 dark:border-gray-600 p-8 flex flex-col items-center justify-center hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors cursor-pointer" id="dropzone">
+                            <i class="fa-solid fa-cloud-arrow-up text-4xl text-primary mb-4"></i>
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Upload CSV</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 text-center mb-4">Drag and drop your CSV file here, or click to browse</p>
+                            <input type="file" class="hidden" accept=".csv" id="csvUpload">
+                            <label for="csvUpload" class="bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700 cursor-pointer">
+                                Browse Files
+                            </label>
+                            <div class="mt-4 text-xs text-blue-600 dark:text-blue-400 hover:underline">Download CSV Template</div>
+                        </div>
+
+                        <!-- Groups Summary -->
+                        <div class="bg-white rounded-lg shadow-sm border border-gray-200 dark:bg-gray-800 dark:border-gray-700 p-6">
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Contact Groups</h3>
+                            <ul class="space-y-3">
+                                <li class="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                    <div class="flex items-center">
+                                        <i class="fa-solid fa-users text-gray-400 mr-3"></i>
+                                        <span class="font-medium text-gray-900 dark:text-white">All Customers</span>
+                                    </div>
+                                    <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">12,450</span>
+                                </li>
+                                <li class="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                    <div class="flex items-center">
+                                        <i class="fa-solid fa-star text-yellow-400 mr-3"></i>
+                                        <span class="font-medium text-gray-900 dark:text-white">VIP Members</span>
+                                    </div>
+                                    <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">850</span>
+                                </li>
+                                <li class="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                    <div class="flex items-center">
+                                        <i class="fa-solid fa-location-dot text-red-400 mr-3"></i>
+                                        <span class="font-medium text-gray-900 dark:text-white">NY Region</span>
+                                    </div>
+                                    <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">3,200</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== DELIVERY REPORTS ==================== -->
+                <div x-show="currentTab === 'reports'" x-cloak>
+                    <div class="mb-6 flex justify-between items-center">
+                        <div>
+                            <h1 class="text-2xl font-semibold text-gray-900 dark:text-white">Delivery Reports</h1>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Detailed logs of sent messages</p>
+                        </div>
+                        <button class="bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg text-sm px-4 py-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700">
+                            <i class="fa-solid fa-download mr-1"></i> Export Logs
+                        </button>
+                    </div>
+
+                    <div class="bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 overflow-hidden">
+                         <div class="p-4 border-b border-gray-200 dark:border-gray-700 flex gap-4 bg-gray-50 dark:bg-gray-800">
+                            <input type="date" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block p-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            <select class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block p-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                <option>All Status</option>
+                                <option>Delivered</option>
+                                <option>Failed</option>
+                                <option>Pending</option>
+                            </select>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3">Message ID</th>
+                                        <th scope="col" class="px-6 py-3">Recipient</th>
+                                        <th scope="col" class="px-6 py-3">Timestamp</th>
+                                        <th scope="col" class="px-6 py-3">Status</th>
+                                        <th scope="col" class="px-6 py-3">Cost</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                        <td class="px-6 py-4 font-mono text-xs">msg_1a2b3c4d</td>
+                                        <td class="px-6 py-4">+19876543210</td>
+                                        <td class="px-6 py-4">Oct 28, 10:45 AM</td>
+                                        <td class="px-6 py-4">
+                                            <span class="flex items-center text-green-600 dark:text-green-400"><i class="fa-solid fa-circle-check mr-1 text-xs"></i> Delivered</span>
+                                        </td>
+                                        <td class="px-6 py-4">$0.015</td>
+                                    </tr>
+                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                        <td class="px-6 py-4 font-mono text-xs">msg_5e6f7g8h</td>
+                                        <td class="px-6 py-4">+15551234567</td>
+                                        <td class="px-6 py-4">Oct 28, 10:45 AM</td>
+                                        <td class="px-6 py-4">
+                                            <span class="flex items-center text-red-600 dark:text-red-400"><i class="fa-solid fa-circle-xmark mr-1 text-xs"></i> Failed (Invalid Number)</span>
+                                        </td>
+                                        <td class="px-6 py-4">$0.000</td>
+                                    </tr>
+                                    <tr class="bg-white dark:bg-gray-800">
+                                        <td class="px-6 py-4 font-mono text-xs">msg_9i0j1k2l</td>
+                                        <td class="px-6 py-4">+447911123456</td>
+                                        <td class="px-6 py-4">Oct 28, 10:46 AM</td>
+                                        <td class="px-6 py-4">
+                                            <span class="flex items-center text-yellow-600 dark:text-yellow-400"><i class="fa-solid fa-clock mr-1 text-xs"></i> Pending</span>
+                                        </td>
+                                        <td class="px-6 py-4">--</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="p-4 border-t border-gray-200 dark:border-gray-700 flex items-center justify-between">
+                            <span class="text-sm text-gray-500 dark:text-gray-400">Showing 1-3 of 12,450 entries</span>
+                            <div class="inline-flex mt-2 xs:mt-0">
+                                <button class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-l-lg hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700">Prev</button>
+                                <button class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-r-lg hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700">Next</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== BILLING SYSTEM ==================== -->
+                <div x-show="currentTab === 'billing'" x-cloak>
+                    <div class="mb-6 flex justify-between items-center">
+                        <h1 class="text-2xl font-semibold text-gray-900 dark:text-white">Billing & Top-up</h1>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <!-- Balance Card -->
+                        <div class="bg-gradient-to-r from-primary to-purple-600 rounded-lg shadow-md p-6 text-white">
+                            <h3 class="text-sm font-medium opacity-80 mb-1">Available Credit</h3>
+                            <div class="text-4xl font-bold mb-4">$452.50</div>
+                            <p class="text-sm opacity-80 mb-6">~ 30,166 SMS remaining</p>
+                            <button class="w-full bg-white text-primary font-semibold py-2 px-4 rounded-lg hover:bg-gray-100 transition-colors">
+                                Top Up Balance
+                            </button>
+                        </div>
+
+                        <!-- Invoices -->
+                        <div class="lg:col-span-2 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 p-6">
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Recent Invoices</h3>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                        <tr>
+                                            <th scope="col" class="px-4 py-2">Invoice #</th>
+                                            <th scope="col" class="px-4 py-2">Date</th>
+                                            <th scope="col" class="px-4 py-2">Amount</th>
+                                            <th scope="col" class="px-4 py-2">Status</th>
+                                            <th scope="col" class="px-4 py-2"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="border-b dark:border-gray-700">
+                                            <td class="px-4 py-3 font-medium text-gray-900 dark:text-white">INV-2023-089</td>
+                                            <td class="px-4 py-3">Oct 01, 2023</td>
+                                            <td class="px-4 py-3">$100.00</td>
+                                            <td class="px-4 py-3"><span class="bg-green-100 text-green-800 text-xs px-2 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Paid</span></td>
+                                            <td class="px-4 py-3 text-right"><button class="text-blue-600 hover:underline"><i class="fa-solid fa-download"></i> PDF</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-4 py-3 font-medium text-gray-900 dark:text-white">INV-2023-042</td>
+                                            <td class="px-4 py-3">Sep 01, 2023</td>
+                                            <td class="px-4 py-3">$250.00</td>
+                                            <td class="px-4 py-3"><span class="bg-green-100 text-green-800 text-xs px-2 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Paid</span></td>
+                                            <td class="px-4 py-3 text-right"><button class="text-blue-600 hover:underline"><i class="fa-solid fa-download"></i> PDF</button></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== API INTEGRATION ==================== -->
+                <div x-show="currentTab === 'api'" x-cloak>
+                    <div class="mb-6">
+                        <h1 class="text-2xl font-semibold text-gray-900 dark:text-white">API Credentials</h1>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Integrate SMS Pro with your existing applications</p>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 dark:bg-gray-800 dark:border-gray-700 p-6 max-w-3xl">
+                        <div class="mb-6">
+                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">API Key</label>
+                            <div class="flex">
+                                <input type="password" value="sk_live_123abc456def789ghi012jkl" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-l-lg focus:ring-primary focus:border-primary block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300" disabled readonly>
+                                <button class="bg-gray-200 hover:bg-gray-300 text-gray-800 border border-l-0 border-gray-300 px-4 rounded-r-lg dark:bg-gray-600 dark:hover:bg-gray-500 dark:border-gray-600 dark:text-white transition-colors">
+                                    <i class="fa-regular fa-copy"></i> Copy
+                                </button>
+                            </div>
+                            <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">Keep your API key secure. Do not share it in publicly accessible areas.</p>
+                        </div>
+                        
+                        <div class="border-t border-gray-200 dark:border-gray-700 pt-6">
+                            <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Code Example (Python/Django)</h3>
+                            <div class="bg-gray-900 rounded-lg p-4 text-sm text-gray-300 overflow-x-auto font-mono">
+<pre><code>import requests
+
+url = "https://api.smspro.com/v1/messages"
+payload = {
+    "to": "+1234567890",
+    "message": "Hello from SMS Pro API!",
+    "sender_id": "MyCompany"
+}
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY",
+    "Content-Type": "application/json"
+}
+
+response = requests.post(url, json=payload, headers=headers)
+print(response.json())</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== USER ROLES ==================== -->
+                <div x-show="currentTab === 'roles'" x-cloak>
+                     <div class="mb-6 flex justify-between items-center">
+                        <div>
+                            <h1 class="text-2xl font-semibold text-gray-900 dark:text-white">Team & Roles</h1>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Manage who has access to your workspace</p>
+                        </div>
+                        <button class="bg-primary hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg transition-colors text-sm">
+                            <i class="fa-solid fa-user-plus mr-1"></i> Invite Member
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- User Card -->
+                        <div class="bg-white rounded-lg shadow-sm border border-gray-200 dark:bg-gray-800 dark:border-gray-700 p-6 flex items-center justify-between">
+                            <div class="flex items-center">
+                                <img class="w-12 h-12 rounded-full" src="https://ui-avatars.com/api/?name=Magnificati+Noel&background=4F46E5&color=fff" alt="User">
+                                <div class="ml-4">
+                                    <h3 class="text-base font-semibold text-gray-900 dark:text-white">Magnificati Noel (You)</h3>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">admin@smspro.com</p>
+                                </div>
+                            </div>
+                            <span class="bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-purple-900 dark:text-purple-300">Owner</span>
+                        </div>
+                        
+                         <!-- User Card -->
+                         <div class="bg-white rounded-lg shadow-sm border border-gray-200 dark:bg-gray-800 dark:border-gray-700 p-6 flex flex-col justify-between">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-gray-600 dark:text-gray-300 font-bold">JS</div>
+                                    <div class="ml-3">
+                                        <h3 class="text-sm font-semibold text-gray-900 dark:text-white">Magnificati Noel</h3>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">noel@smspro.com</p>
+                                    </div>
+                                </div>
+                                <button class="text-gray-400 hover:text-gray-900 dark:hover:text-white"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                            </div>
+                            <div class="flex justify-between items-center mt-auto">
+                                <select class="text-sm bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary focus:border-primary block p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    <option>Manager</option>
+                                    <option selected>Developer</option>
+                                    <option>Analyst</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Chart.js Initialization Script -->
+    <script>
+        document.addEventListener('alpine:init', () => {
+            // Wait for DOM to be ready
+            setTimeout(() => {
+                const isDark = document.documentElement.classList.contains('dark');
+                const textColor = isDark ? '#9ca3af' : '#4b5563';
+                const gridColor = isDark ? '#374151' : '#f3f4f6';
+
+                // Delivery Chart
+                const ctxDelivery = document.getElementById('deliveryChart').getContext('2d');
+                new Chart(ctxDelivery, {
+                    type: 'line',
+                    data: {
+                        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                        datasets: [{
+                            label: 'Success Rate (%)',
+                            data: [98.5, 99.1, 98.2, 97.9, 99.5, 98.8, 99.2],
+                            borderColor: '#10B981', // Emerald 500
+                            tension: 0.3,
+                            fill: true,
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: { min: 95, max: 100, ticks: { color: textColor }, grid: { color: gridColor } },
+                            x: { ticks: { color: textColor }, grid: { display: false } }
+                        }
+                    }
+                });
+
+                // Cost Chart
+                const ctxCost = document.getElementById('costChart').getContext('2d');
+                new Chart(ctxCost, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                        datasets: [
+                            {
+                                label: 'Volume (K)',
+                                data: [12, 19, 15, 25],
+                                backgroundColor: '#4F46E5', // Indigo 600
+                                borderRadius: 4
+                            },
+                            {
+                                label: 'Cost ($)',
+                                data: [18, 28, 22, 37],
+                                backgroundColor: '#818CF8', // Indigo 400
+                                borderRadius: 4
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: { ticks: { color: textColor }, grid: { color: gridColor } },
+                            x: { ticks: { color: textColor }, grid: { display: false } }
+                        },
+                        plugins: {
+                            legend: { labels: { color: textColor } }
+                        }
+                    }
+                });
+            }, 100);
+        });
+
+        // Drag and drop visual feedback logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const dropzone = document.getElementById('dropzone');
+            if(dropzone) {
+                ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                    dropzone.addEventListener(eventName, preventDefaults, false);
+                });
+
+                function preventDefaults (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+
+                ['dragenter', 'dragover'].forEach(eventName => {
+                    dropzone.addEventListener(eventName, () => {
+                        dropzone.classList.add('bg-gray-100', 'dark:bg-gray-700', 'border-primary');
+                    }, false);
+                });
+
+                ['dragleave', 'drop'].forEach(eventName => {
+                    dropzone.addEventListener(eventName, () => {
+                        dropzone.classList.remove('bg-gray-100', 'dark:bg-gray-700', 'border-primary');
+                    }, false);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
