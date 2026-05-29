@@ -1,115 +1,407 @@
+
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>SMS PRO</title>
+    <title>
+        {% block title %}
+            STIMULATE BULK SMS SYSTEM
+        {% endblock %}
+    </title>
 
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4F46E5',
+                        secondary: '#10B981',
+                    }
+                }
+            }
+        }
+    </script>
 
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
-     <link rel="stylesheet" href="{% static 'css/style.css' %}">
-     
+    <!-- Alpine JS -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .sidebar-scroll::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .sidebar-scroll::-webkit-scrollbar-thumb {
+            background: #6B7280;
+            border-radius: 20px;
+        }
+    </style>
+
+    {% block extra_css %}{% endblock %}
 </head>
 
-<body>
+<body
+    x-data="{
+        darkMode: localStorage.getItem('darkMode') === 'true'
+    }"
 
-<div class="dashboard-layout">
+    x-init="
+        darkMode
+        ? document.documentElement.classList.add('dark')
+        : document.documentElement.classList.remove('dark')
+    "
 
-    <!-- Sidebar -->
-    <div class="sidebar">
+    :class="{ 'dark': darkMode }"
 
-        <div class="logo">
-            SMS PRO
-        </div>
+    class="
+        bg-gray-100 dark:bg-[#0B1120]
+        text-gray-900 dark:text-white
+        transition-colors duration-300
+    "
+>
 
-        <ul class="nav-links">
+    <div class="flex h-screen overflow-hidden">
 
-            <li>
-                <a href="/">
-                    <i class="bi bi-grid"></i>
-                    Dashboard
-                </a>
-            </li>
+        <!-- SIDEBAR -->
+        <aside class="
+            w-72
+            border-r
+            flex
+            flex-col
+            bg-white dark:bg-[#172033]
+            border-gray-200 dark:border-gray-800
+            transition-colors duration-300
+        ">
 
-            <li>
-                <a href="/campaigns/">
-                    <i class="bi bi-megaphone"></i>
-                    Campaigns
-                </a>
-            </li>
+            <!-- LOGO -->
+            <div class="
+                h-24
+                flex
+                items-center
+                px-6
+                border-b
+                border-gray-200 dark:border-gray-800
+            ">
 
-            <li>
-                <a href="/contacts/">
-                    <i class="bi bi-people"></i>
-                    Contacts
-                </a>
-            </li>
+                <img
+                    src="{% static 'images/logo.png' %}"
+                    class="h-14"
+                    alt="Stimulate Logo"
+                >
 
-            <li>
-                <a href="/sms-center/">
-                    <i class="bi bi-chat-dots"></i>
-                    SMS Center
-                </a>
-            </li>
-
-            <li>
-                <a href="/send-sms/">
-                    <i class="bi bi-send"></i>
-                    Send SMS
-                </a>
-            </li>
-
-            <li>
-                <a href="/reports/">
-                    <i class="bi bi-bar-chart"></i>
-                    Delivery Reports
-                </a>
-            </li>
-
-            <li>
-                <a href="/billing/">
-                    <i class="bi bi-wallet2"></i>
-                    Billing
-                </a>
-            </li>
-
-        </ul>
-
-    </div>
-
-    <!-- Main -->
-    <div class="main-content">
-
-        <!-- Topbar -->
-        <div class="topbar">
-
-            <h5>Dashboard</h5>
-
-            <div>
-                {{ request.user.username }}
-
-                <a href="{% url 'logout' %}" class="btn btn-danger btn-sm ms-3">
-                    Logout
-                </a>
             </div>
 
-        </div>
+            <!-- MENU -->
+            <nav class="
+                flex-1
+                px-4
+                py-6
+                overflow-y-auto
+                sidebar-scroll
+            ">
 
-        {% block content %}
-        {% endblock %}
+                <ul class="space-y-2">
+
+                    <!-- Dashboard -->
+                    <li>
+                        <a href="{% url 'dashboard' %}"
+                            class="
+                                flex
+                                items-center
+                                gap-3
+                                px-4
+                                py-3
+                                rounded-xl
+                                bg-primary
+                                text-white
+                            ">
+
+                            <span>📊</span>
+                            Dashboard Analytics
+                        </a>
+                    </li>
+
+                    <!-- Campaigns -->
+                    <li>
+                        <a href="{% url 'campaign_list' %}"
+                            class="
+                                flex
+                                items-center
+                                gap-3
+                                px-4
+                                py-3
+                                rounded-xl
+                                text-gray-700 dark:text-gray-200
+                                hover:bg-gray-100 dark:hover:bg-gray-700
+                                hover:text-primary
+                                transition
+                            ">
+
+                            <span>📢</span>
+                            Campaigns
+                        </a>
+                    </li>
+
+                    <!-- Send SMS -->
+                    <li>
+                        <a href="{% url 'send_sms' %}"
+                            class="
+                                flex
+                                items-center
+                                gap-3
+                                px-4
+                                py-3
+                                rounded-xl
+                                text-gray-700 dark:text-gray-200
+                                hover:bg-gray-100 dark:hover:bg-gray-700
+                                hover:text-primary
+                                transition
+                            ">
+
+                            <span>✈️</span>
+                            Send SMS
+                        </a>
+                    </li>
+
+                    <!-- Contacts -->
+                    <li>
+                        <a href="{% url 'contact_list' %}"
+                            class="
+                                flex
+                                items-center
+                                gap-3
+                                px-4
+                                py-3
+                                rounded-xl
+                                text-gray-700 dark:text-gray-200
+                                hover:bg-gray-100 dark:hover:bg-gray-700
+                                hover:text-primary
+                                transition
+                            ">
+
+                            <span>👥</span>
+                            Contacts
+                        </a>
+                    </li>
+
+                    <!-- Reports -->
+                    <li>
+                        <a href="{% url 'reports' %}"
+                            class="
+                                flex
+                                items-center
+                                gap-3
+                                px-4
+                                py-3
+                                rounded-xl
+                                text-gray-700 dark:text-gray-200
+                                hover:bg-gray-100 dark:hover:bg-gray-700
+                                hover:text-primary
+                                transition
+                            ">
+
+                            <span>📄</span>
+                            Delivery Reports
+                        </a>
+                    </li>
+
+                    <hr class="border-gray-300 dark:border-gray-700 my-4">
+
+                    <!-- Billing -->
+                    <li>
+                        <a href="{% url 'billing' %}"
+                            class="
+                                flex
+                                items-center
+                                gap-3
+                                px-4
+                                py-3
+                                rounded-xl
+                                text-gray-700 dark:text-gray-200
+                                hover:bg-gray-100 dark:hover:bg-gray-700
+                                hover:text-primary
+                                transition
+                            ">
+
+                            <span>💳</span>
+                            Billing System
+                        </a>
+                    </li>
+
+                    <!-- API -->
+                    <li>
+                        <a href="#"
+                            class="
+                                flex
+                                items-center
+                                gap-3
+                                px-4
+                                py-3
+                                rounded-xl
+                                text-gray-700 dark:text-gray-200
+                                hover:bg-gray-100 dark:hover:bg-gray-700
+                                hover:text-primary
+                                transition
+                            ">
+
+                            <span>⚙️</span>
+                            API Integration
+                        </a>
+                    </li>
+
+                    <!-- User Roles -->
+                    <li>
+                        <a href="#"
+                            class="
+                                flex
+                                items-center
+                                gap-3
+                                px-4
+                                py-3
+                                rounded-xl
+                                text-gray-700 dark:text-gray-200
+                                hover:bg-gray-100 dark:hover:bg-gray-700
+                                hover:text-primary
+                                transition
+                            ">
+
+                            <span>👤</span>
+                            User Roles
+                        </a>
+                    </li>
+
+                </ul>
+
+            </nav>
+
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+
+            <!-- TOP NAVBAR -->
+            <header class="
+                h-24
+                px-8
+                flex
+                items-center
+                justify-between
+                border-b
+                bg-white dark:bg-[#172033]
+                border-gray-200 dark:border-gray-800
+                transition-colors duration-300
+            ">
+
+                <!-- PAGE TITLE -->
+                <div>
+                    <h1 class="
+                        text-2xl
+                        font-bold
+                        text-gray-900 dark:text-white
+                    ">
+                        {% block page_title %}
+                            Dashboard
+                        {% endblock %}
+                    </h1>
+                </div>
+
+                <!-- RIGHT SIDE -->
+                <div class="flex items-center gap-5">
+
+                    <!-- DARK MODE BUTTON -->
+                    <button
+                        @click="
+                            darkMode = !darkMode;
+                            localStorage.setItem('darkMode', darkMode);
+
+                            darkMode
+                            ? document.documentElement.classList.add('dark')
+                            : document.documentElement.classList.remove('dark');
+                        "
+
+                        class="
+                            w-10
+                            h-10
+                            rounded-full
+                            bg-gray-200 dark:bg-gray-700
+                            flex
+                            items-center
+                            justify-center
+                            hover:scale-110
+                            transition
+                        "
+                    >
+
+                        <span x-show="!darkMode">🌙</span>
+                        <span x-show="darkMode">☀️</span>
+
+                    </button>
+
+                    <!-- ROLE -->
+                    <span class="
+                        bg-primary
+                        text-white
+                        px-4
+                        py-1
+                        rounded-full
+                        text-sm
+                    ">
+                        Admin
+                    </span>
+
+                    <!-- USER -->
+                    <div class="
+                        w-10
+                        h-10
+                        rounded-full
+                        bg-secondary
+                        flex
+                        items-center
+                        justify-center
+                        text-white
+                    ">
+                        US
+                    </div>
+
+                </div>
+
+            </header>
+
+            <!-- PAGE CONTENT -->
+            <main
+                class="
+                    flex-1
+                    overflow-y-auto
+                    p-8
+                    bg-gray-100 dark:bg-[#0B1120]
+                    text-gray-900 dark:text-white
+                    transition-colors duration-300
+                "
+            >
+
+                {% block content %}
+                {% endblock %}
+
+            </main>
+
+        </div>
 
     </div>
 
-</div>
+    {% block extra_js %}{% endblock %}
 
 </body>
 </html>
+```

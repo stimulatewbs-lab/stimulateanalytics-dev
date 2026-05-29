@@ -92,12 +92,15 @@
                                     <span class="ml-3">Dashboard Analytics</span>
                                 </a>
                             </li>
-                            <li>
-                                <a href="#" @click.prevent="currentTab = 'campaigns'; sidebarOpen = false" :class="{ 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white': currentTab === 'campaigns', 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700': currentTab !== 'campaigns' }" class="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 group transition-colors">
-                                    <i class="fa-solid fa-bullhorn w-6 text-center text-gray-500 group-hover:text-gray-900 transition duration-75 dark:text-gray-400 dark:group-hover:text-white"></i>
-                                    <span class="ml-3">Campaigns</span>
-                                </a>
-                            </li>
+                          <li>
+    <a href="{% url 'campaign_list' %}"
+       class="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 group transition-colors hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white">
+        
+        <i class="fa-solid fa-bullhorn w-6 text-center text-gray-500 group-hover:text-gray-900 transition duration-75 dark:text-gray-400 dark:group-hover:text-white"></i>
+        
+        <span class="ml-3">Campaigns</span>
+    </a>
+</li>
                             <li>
                                 <a href="#" @click.prevent="currentTab = 'send-sms'; sidebarOpen = false" :class="{ 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white': currentTab === 'send-sms', 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700': currentTab !== 'send-sms' }" class="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 group transition-colors">
                                     <i class="fa-solid fa-paper-plane w-6 text-center text-gray-500 group-hover:text-gray-900 transition duration-75 dark:text-gray-400 dark:group-hover:text-white"></i>
@@ -161,7 +164,7 @@
                                 </div>
                                 <div class="ml-4">
                                     <span class="block text-sm font-medium text-gray-500 dark:text-gray-400">Total Sent</span>
-                                    <span class="block text-2xl font-semibold text-gray-900 dark:text-white">124,592</span>
+                                    <span class="block text-2xl font-semibold text-gray-900 dark:text-white">{{ total_sent }}</span>
                                 </div>
                             </div>
                         </div>
@@ -309,7 +312,11 @@
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                         <!-- Compose Area -->
                         <div class="lg:col-span-2 bg-white rounded-lg shadow-sm border border-gray-200 dark:bg-gray-800 dark:border-gray-700 p-6">
-                            <form>
+                            <form method="POST">
+                                  {% csrf_token %}
+                                  <input type="hidden" name="recipient">
+                                  <input type="hidden" name="message">
+                                  <input type="hidden" name="sender_id">
                                 <div class="mb-4">
                                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Sender ID</label>
                                     <select class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white">

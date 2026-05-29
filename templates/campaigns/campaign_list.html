@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+
+{% block title %}Campaigns{% endblock %}
+
+{% block content %}
+
+<div class="flex justify-between items-center mb-6">
+
+    <div>
+        <h1 class="text-2xl font-bold dark:text-white">
+            Campaigns
+        </h1>
+    </div>
+
+    <a href="{% url 'campaign_create' %}"
+       class="bg-primary text-white px-4 py-2 rounded-lg">
+        Create Campaign
+    </a>
+
+</div>
+
+<div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
+
+    <table class="w-full">
+
+        <div x-show="currentTab === 'campaigns'" x-cloak>
+                    <div class="mb-6 flex justify-between items-center">
+                        <div>
+                            <h1 class="text-2xl font-semibold text-gray-900 dark:text-white">Campaigns</h1>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Manage your bulk SMS campaigns</p>
+                        </div>
+                        <button class="bg-primary hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg transition-colors text-sm">
+                            <i class="fa-solid fa-plus mr-1"></i> Create Campaign
+                        </button>
+                    </div>
+
+                    <div class="bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 overflow-hidden">
+                        <div class="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center bg-gray-50 dark:bg-gray-800">
+                            <div class="relative w-64">
+                                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                    <i class="fa-solid fa-search text-gray-500 dark:text-gray-400"></i>
+                                </div>
+                                <input type="text" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder="Search campaigns...">
+                            </div>
+                            <div class="flex space-x-2">
+                                <select class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block p-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    <option>All Status</option>
+                                    <option>Active</option>
+                                    <option>Draft</option>
+                                    <option>Completed</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3">Campaign Name</th>
+                                        <th scope="col" class="px-6 py-3">Status</th>
+                                        <th scope="col" class="px-6 py-3">Recipients</th>
+                                        <th scope="col" class="px-6 py-3">Created</th>
+                                        <th scope="col" class="px-6 py-3 text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                        <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Holiday Promo 2024</td>
+                                        <td class="px-6 py-4">
+                                            <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Completed</span>
+                                        </td>
+                                        <td class="px-6 py-4">12,500</td>
+                                        <td class="px-6 py-4">Oct 24, 2023</td>
+                                        <td class="px-6 py-4 text-right space-x-2">
+                                            <button class="text-blue-600 dark:text-blue-500 hover:underline"><i class="fa-solid fa-eye"></i></button>
+                                            <button class="text-gray-600 dark:text-gray-400 hover:underline"><i class="fa-solid fa-pen"></i></button>
+                                            <button class="text-red-600 dark:text-red-500 hover:underline"><i class="fa-solid fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                        <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Weekend Flash Sale</td>
+                                        <td class="px-6 py-4">
+                                            <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">Active</span>
+                                        </td>
+                                        <td class="px-6 py-4">5,200</td>
+                                        <td class="px-6 py-4">Oct 26, 2023</td>
+                                        <td class="px-6 py-4 text-right space-x-2">
+                                            <button class="text-blue-600 dark:text-blue-500 hover:underline"><i class="fa-solid fa-eye"></i></button>
+                                            <button class="text-gray-600 dark:text-gray-400 hover:underline"><i class="fa-solid fa-pen"></i></button>
+                                            <button class="text-red-600 dark:text-red-500 hover:underline"><i class="fa-solid fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                        <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">New User Welcome</td>
+                                        <td class="px-6 py-4">
+                                            <span class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">Draft</span>
+                                        </td>
+                                        <td class="px-6 py-4">--</td>
+                                        <td class="px-6 py-4">Oct 27, 2023</td>
+                                        <td class="px-6 py-4 text-right space-x-2">
+                                            <button class="text-blue-600 dark:text-blue-500 hover:underline"><i class="fa-solid fa-eye"></i></button>
+                                            <button class="text-gray-600 dark:text-gray-400 hover:underline"><i class="fa-solid fa-pen"></i></button>
+                                            <button class="text-red-600 dark:text-red-500 hover:underline"><i class="fa-solid fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+{% for campaign in campaigns %}
+
+<tr class="border-b dark:border-gray-700">
+
+    <td class="p-4">
+        {{ campaign.name }}
+    </td>
+
+    <td class="p-4">
+        {{ campaign.status }}
+    </td>
+
+    <td class="p-4">
+        {{ campaign.sender_id }}
+    </td>
+
+    <td class="p-4">
+
+        <a href="#"
+           class="text-blue-500">
+           View
+        </a>
+
+    </td>
+
+</tr>
+
+{% empty %}
+
+<tr>
+    <td colspan="4" class="p-4 text-center">
+        No campaigns found
+    </td>
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</div>
+
+{% endblock %}
+

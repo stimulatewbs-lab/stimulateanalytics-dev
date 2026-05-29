@@ -1,23 +1,40 @@
 from django.shortcuts import render
-
-# Create your views here.
-from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
-
+from sms.models import SMSMessage
 from campaigns.models import Campaign
-from contacts.models import Contact
 
 
-@login_required
 def dashboard_view(request):
 
-    total_campaigns = Campaign.objects.filter(user=request.user).count()
+    total_sent = SMSMessage.objects.filter(
+        status='sent'
+    ).count()
 
-    total_contacts = Contact.objects.filter(group__user=request.user).count()
+    delivered = SMSMessage.objects.filter(
+        status='delivered'
+    ).count()
+
+    total_messages = SMSMessage.objects.count()
+
+    delivery_rate = 0
+
+    if total_messages > 0:
+        delivery_rate = round(
+            (delivered / total_messages) * 100,
+            1
+        )
+
+    active_campaigns = Campaign.objects.filter(
+        status='active'
+    ).count()
 
     context = {
-        'total_campaigns': total_campaigns,
-        'total_contacts': total_contacts,
+        'total_sent': total_sent,
+        'delivery_rate': delivery_rate,
+        'active_campaigns': active_campaigns,
     }
 
-    return render(request, 'dashboard/index.html', context)
+    return render(
+        request,
+        'dashboard/dashboard.html',
+        context
+    )

@@ -1,7 +1,10 @@
 from django.urls import path
 
-from sms.webhooks import delivery_webhook
-from .views import *
+from .views import (
+    sms_dashboard,
+    send_sms,
+    sms_history,
+)
 
 urlpatterns = [
 
@@ -22,9 +25,5 @@ urlpatterns = [
         sms_history,
         name='sms_history'
     ),
-    path(
-    'webhook/delivery/',
-    delivery_webhook,
-    name='delivery_webhook'
-),
+
 ]

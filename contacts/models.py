@@ -1,17 +1,19 @@
 from django.db import models
-
-# Create your models here.
-from django.db import models
 from django.conf import settings
 
 
 class ContactGroup(models.Model):
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
 
     name = models.CharField(max_length=255)
 
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
 
     def __str__(self):
         return self.name
@@ -19,15 +21,30 @@ class ContactGroup(models.Model):
 
 class Contact(models.Model):
 
-    group = models.ForeignKey(ContactGroup, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
 
-    name = models.CharField(max_length=255, blank=True)
+    group = models.ForeignKey(
+        ContactGroup,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
+
+    name = models.CharField(max_length=255)
 
     phone = models.CharField(max_length=20)
 
-    email = models.EmailField(blank=True)
+    email = models.EmailField(
+        blank=True,
+        null=True
+    )
 
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
 
     def __str__(self):
-        return self.phone
+        return self.name

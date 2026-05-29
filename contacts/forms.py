@@ -12,7 +12,7 @@ class ContactForm(forms.ModelForm):
         fields = [
             'name',
             'phone',
-            'email',
+           
             'group'
         ]
 

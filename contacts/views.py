@@ -3,7 +3,7 @@ import csv
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 
-from .models import Contact, ContactGroup
+from .models import Contact
 from .forms import ContactForm, ContactGroupForm, CSVUploadForm
 
 
