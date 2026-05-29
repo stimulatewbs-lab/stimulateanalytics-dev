@@ -3,55 +3,35 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
+ <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>
-        {% block title %}
-            STIMULATE BULK SMS SYSTEM
-        {% endblock %}
-    </title>
-
-    <!-- Tailwind CSS -->
+    <title>STIMULATE BULK SMS SYSTEM  - Dashboard</title>
+    <!-- Include Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Tailwind Configuration -->
+    <!-- Configure Tailwind for Dark Mode -->
     <script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
-                        primary: '#4F46E5',
-                        secondary: '#10B981',
+                        primary: '#4F46E5', // Indigo 600
+                        secondary: '#10B981', // Emerald 500
                     }
                 }
             }
         }
     </script>
-
-    <!-- Alpine JS -->
+    <!-- Include Alpine.js for lightweight interactions -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-
+    <!-- Include Chart.js for analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body {
-            font-family: 'Segoe UI', sans-serif;
-        }
-
-        .sidebar-scroll::-webkit-scrollbar {
-            width: 5px;
-        }
-
-        .sidebar-scroll::-webkit-scrollbar-thumb {
-            background: #6B7280;
-            border-radius: 20px;
-        }
+        [x-cloak] { display: none !important; }
     </style>
-
-    {% block extra_css %}{% endblock %}
 </head>
-
 <body
     x-data="{
         darkMode: localStorage.getItem('darkMode') === 'true'
