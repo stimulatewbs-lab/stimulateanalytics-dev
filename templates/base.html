@@ -2,8 +2,8 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-
- <meta charset="UTF-8">
+<head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>STIMULATE BULK SMS SYSTEM  - Dashboard</title>
     <!-- Include Tailwind CSS -->
@@ -55,6 +55,9 @@
     <div class="flex h-screen overflow-hidden">
 
         <!-- SIDEBAR -->
+        {% if request.user.is_authenticated %}
+
+
         <aside class="
             w-72
             border-r
@@ -113,9 +116,55 @@
                         </a>
                     </li>
 
+
+<!-- Users -->
+  <li>
+                        <a href="{% url 'accounts:user_list' %}"
+                            class="
+                                flex
+                                items-center
+                                gap-3
+                                px-4
+                                py-3
+                                rounded-xl
+                                text-gray-700 dark:text-gray-200
+                                hover:bg-gray-100 dark:hover:bg-gray-700
+                                hover:text-primary
+                                transition
+                            ">
+
+                            <span></span>
+
+    User Management
+</a>
+ </li>
+
+<!-- Profile -->
+
+    <li>
+                        <a href="{% url 'accounts:profile' %}"
+                            class="
+                                flex
+                                items-center
+                                gap-3
+                                px-4
+                                py-3
+                                rounded-xl
+                                text-gray-700 dark:text-gray-200
+                                hover:bg-gray-100 dark:hover:bg-gray-700
+                                hover:text-primary
+                                transition
+                            ">
+
+                            <span></span>
+                            My Profile
+                       </a>
+                       </li>
+    
+                        
                     <!-- Campaigns -->
                     <li>
-                        <a href="{% url 'campaign_list' %}"
+                        <a href="#"
                             class="
                                 flex
                                 items-center
@@ -136,7 +185,7 @@
 
                     <!-- Send SMS -->
                     <li>
-                        <a href="{% url 'send_sms' %}"
+                        <a href="#"
                             class="
                                 flex
                                 items-center
@@ -157,7 +206,7 @@
 
                     <!-- Contacts -->
                     <li>
-                        <a href="{% url 'contact_list' %}"
+                        <a href="#"
                             class="
                                 flex
                                 items-center
@@ -178,7 +227,7 @@
 
                     <!-- Reports -->
                     <li>
-                        <a href="{% url 'reports' %}"
+                        <a href="#"
                             class="
                                 flex
                                 items-center
@@ -201,7 +250,7 @@
 
                     <!-- Billing -->
                     <li>
-                        <a href="{% url 'billing' %}"
+                        <a href="#"
                             class="
                                 flex
                                 items-center
@@ -267,7 +316,7 @@
             </nav>
 
         </aside>
-
+{% endif %}
         <!-- MAIN CONTENT -->
         <div class="flex-1 flex flex-col overflow-hidden">
 
@@ -297,8 +346,10 @@
                     </h1>
                 </div>
 
-                <!-- RIGHT SIDE -->
-                <div class="flex items-center gap-5">
+                {% if request.user.is_authenticated %}
+
+<!-- RIGHT SIDE -->
+<div class="flex items-center gap-5">
 
                     <!-- DARK MODE BUTTON -->
                     <button
@@ -338,7 +389,7 @@
                         rounded-full
                         text-sm
                     ">
-                        Admin
+                      {{ request.user.role }}
                     </span>
 
                     <!-- USER -->
@@ -352,10 +403,25 @@
                         justify-center
                         text-white
                     ">
-                        US
+                       {{ request.user.username|slice:":2"|upper }}
                     </div>
+<a
+    href="{% url 'accounts:logout' %}"
+    class="
+        px-4
+        py-2
+        rounded-lg
+        bg-red-600
+        text-white
+        hover:bg-red-700
+        transition
+    "
+>
+    Logout
+</a>
+               </div>
 
-                </div>
+            {% endif %}
 
             </header>
 
@@ -370,7 +436,19 @@
                     transition-colors duration-300
                 "
             >
-
+{% if messages %}
+    {% for message in messages %}
+        <div class="
+            mb-4
+            p-4
+            rounded-lg
+            bg-green-100
+            text-green-800
+        ">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
                 {% block content %}
                 {% endblock %}
 
@@ -382,6 +460,7 @@
 
     {% block extra_js %}{% endblock %}
 
-</body>
+</head>
+<body>
 </html>
-```
+

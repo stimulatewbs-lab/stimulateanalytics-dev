@@ -44,11 +44,6 @@ INSTALLED_APPS = [
 
     'accounts',
     'dashboard',
-    'campaigns',
-    'contacts',
-    'sms',
-    'reports',
-    'billing',
 ]
 
 INSTALLED_APPS += [
@@ -160,3 +155,11 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
 CRISPY_TEMPLATE_PACK = "tailwind"
+AUTH_USER_MODEL = 'accounts.User'
+
+LOGIN_URL = 'accounts:login'
+
+LOGIN_REDIRECT_URL = 'dashboard'
+
+LOGOUT_REDIRECT_URL = 'accounts:login'
+

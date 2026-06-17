@@ -5,19 +5,17 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
-
+from django.conf import settings
+from django.conf.urls.static import static
 urlpatterns = [
 
     path('admin/', admin.site.urls),
     
     # WEB APPS
-    path('', include('dashboard.urls')),
-    path('campaigns/', include('campaigns.urls')),
-    path('contacts/', include('contacts.urls')),
-    path('sms/', include('sms.urls')),
-    path('reports/', include('reports.urls')),
-    path('billing/', include('billing.urls')),
-    path('accounts/', include('django.contrib.auth.urls')),
+    path('dashboard/', include('dashboard.urls')),
+  
+    path('accounts/', include('accounts.urls')),
+    
 
     # JWT AUTH API
     path(
@@ -37,3 +35,8 @@ urlpatterns = [
         name='logout'
     ),
 ]
+if settings.DEBUG:
+    urlpatterns += static(
+        settings.MEDIA_URL,
+        document_root=settings.MEDIA_ROOT
+    )

@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block page_title %}
+My Profile
+{% endblock %}
+
+{% block content %}
+
+<div class="bg-white dark:bg-[#172033] rounded-xl p-6 shadow">
+
+    <h2 class="text-xl font-bold mb-6">
+        User Profile
+    </h2>
+
+    <div class="space-y-4">
+
+        <p>
+            <strong>Username:</strong>
+            {{ user_obj.username }}
+        </p>
+
+        <p>
+            <strong>Email:</strong>
+            {{ user_obj.email }}
+        </p>
+
+        <p>
+            <strong>Role:</strong>
+            {{ user_obj.role }}
+        </p>
+
+        <p>
+            <strong>Phone:</strong>
+            {{ user_obj.phone }}
+        </p>
+
+        <p>
+            <strong>Date Joined:</strong>
+            {{ user_obj.date_joined }}
+        </p>
+
+    </div>
+
+</div>
+
+{% endblock %}
