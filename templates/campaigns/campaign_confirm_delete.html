@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block page_title %}
+Delete Campaign
+{% endblock %}
+
+{% block content %}
+
+<div class="bg-white dark:bg-[#172033] rounded-xl p-6 max-w-2xl">
+
+    <h2 class="text-2xl font-bold text-red-600 mb-4">
+        Delete Campaign
+    </h2>
+
+    <p class="mb-6">
+        Are you sure you want to delete
+        <strong>{{ campaign.name }}</strong>?
+    </p>
+
+    <form method="post">
+
+        {% csrf_token %}
+
+        <button
+            type="submit"
+            class="
+                bg-red-600
+                text-white
+                px-4
+                py-2
+                rounded-lg
+            "
+        >
+            Yes, Delete
+        </button>
+
+        <a
+            href="{% url 'campaigns:campaign_list' %}"
+            class="
+                ml-4
+                text-blue-600
+            "
+        >
+            Cancel
+        </a>
+
+    </form>
+
+</div>
+
+{% endblock %}
