@@ -44,6 +44,8 @@ INSTALLED_APPS = [
 
     'accounts',
     'dashboard',
+    'contacts',
+    'campaigns',
 ]
 
 INSTALLED_APPS += [

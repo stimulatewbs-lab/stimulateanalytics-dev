@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block page_title %}
-Campaigns
+Contacts
 {% endblock %}
 
 {% block content %}
@@ -11,40 +11,45 @@ Campaigns
     <div class="flex justify-between items-center mb-6">
 
         <h2 class="text-xl font-bold">
-            Campaign List
+            Contact List
         </h2>
 
         <a
-            href="{% url 'campaigns:campaign_create' %}"
+            href="{% url 'contacts:contact_create' %}"
             class="
                 bg-primary
                 text-white
                 px-4
                 py-2
                 rounded-lg
+                hover:opacity-90
             "
         >
-            Create Campaign
+            Add Contact
         </a>
 
     </div>
 
-    <table class="w-full">
+    <table class="w-full border-collapse">
 
         <thead>
 
-            <tr class="border-b">
+            <tr class="border-b border-gray-300 dark:border-gray-700">
 
                 <th class="text-left py-3">
-                    Name
+                    First Name
                 </th>
 
                 <th class="text-left py-3">
-                    Status
+                    Last Name
                 </th>
 
                 <th class="text-left py-3">
-                    Created
+                    Phone Number
+                </th>
+
+                <th class="text-left py-3">
+                    Email
                 </th>
 
                 <th class="text-left py-3">
@@ -57,36 +62,45 @@ Campaigns
 
         <tbody>
 
-            {% for campaign in campaigns %}
+            {% for contact in contacts %}
 
-            <tr class="border-b">
+            <tr class="border-b border-gray-200 dark:border-gray-700">
 
                 <td class="py-3">
-                    {{ campaign.name }}
+                    {{ contact.first_name }}
                 </td>
 
                 <td class="py-3">
-                    {{ campaign.status }}
+                    {{ contact.last_name }}
                 </td>
 
                 <td class="py-3">
-                    {{ campaign.created_at }}
+                    {{ contact.phone_number }}
+                </td>
+
+                <td class="py-3">
+                    {{ contact.email }}
                 </td>
 
                 <td class="py-3">
 
                     <a
-                        href="{% url 'campaigns:campaign_update' campaign.id %}"
-                        class="text-blue-600"
+                        href="{% url 'contacts:contact_update' contact.id %}"
+                        class="
+                            text-blue-600
+                            hover:underline
+                            mr-3
+                        "
                     >
                         Edit
                     </a>
 
-                    |
-
                     <a
-                        href="{% url 'campaigns:campaign_delete' campaign.id %}"
-                        class="text-red-600"
+                        href="{% url 'contacts:contact_delete' contact.id %}"
+                        class="
+                            text-red-600
+                            hover:underline
+                        "
                     >
                         Delete
                     </a>
@@ -99,10 +113,11 @@ Campaigns
 
             <tr>
 
-                <td colspan="4" class="py-4">
-
-                    No campaigns found
-
+                <td
+                    colspan="5"
+                    class="py-6 text-center text-gray-500"
+                >
+                    No contacts found
                 </td>
 
             </tr>

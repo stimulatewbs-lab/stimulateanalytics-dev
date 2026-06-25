@@ -15,8 +15,10 @@ urlpatterns = [
     path('dashboard/', include('dashboard.urls')),
   
     path('accounts/', include('accounts.urls')),
+    path('contacts/', include('contacts.urls')),
     
-
+path('campaigns/', include('campaigns.urls')
+),
     # JWT AUTH API
     path(
         'api/token/',
