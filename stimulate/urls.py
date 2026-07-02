@@ -18,6 +18,7 @@ urlpatterns = [
     path('contacts/', include('contacts.urls')),
     path('sms/', include('sms.urls')),
     path('campaigns/', include('campaigns.urls')),
+    path('reports/', include('reports.urls')),
     # JWT AUTH API
     path(
         'api/token/',

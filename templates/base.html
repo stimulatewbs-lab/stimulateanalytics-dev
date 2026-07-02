@@ -229,7 +229,7 @@
 
                     <!-- Reports -->
                     <li>
-                        <a href="#"
+                        <a href="{% url 'reports:reports_dashboard' %}"
                             class="
                                 flex
                                 items-center
@@ -249,7 +249,22 @@
                     </li>
 
                     <hr class="border-gray-300 dark:border-gray-700 my-4">
-
+                    <li>
+    <a
+        href="{% url 'contacts:group_list' %}"
+        class="
+            flex
+            items-center
+            gap-3
+            px-4
+            py-3
+            rounded-xl
+        "
+    >
+        <span>🏷️</span>
+        Contact Groups
+    </a>
+</li>
                     <!-- Billing -->
                     <li>
                         <a href="#"

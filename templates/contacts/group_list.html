@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block page_title %}
+Contact Groups
+{% endblock %}
+
+{% block content %}
+
+<div class="bg-white dark:bg-[#172033] rounded-xl p-6">
+
+    <div class="flex justify-between mb-6">
+
+        <h2 class="text-xl font-bold">
+            Contact Groups
+        </h2>
+
+        <a
+            href="{% url 'contacts:group_create' %}"
+            class="
+                bg-primary
+                text-white
+                px-4
+                py-2
+                rounded-lg
+            "
+        >
+            Add Group
+        </a>
+
+    </div>
+
+    <table class="w-full">
+
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            {% for group in groups %}
+
+            <tr>
+
+                <td>
+                    {{ group.name }}
+                </td>
+
+                <td>
+                    {{ group.description }}
+                </td>
+
+                <td>
+
+                    <a
+                        href="{% url 'contacts:group_update' group.id %}"
+                    >
+                        Edit
+                    </a>
+
+                    |
+
+                    <a
+                        href="{% url 'contacts:group_delete' group.id %}"
+                    >
+                        Delete
+                    </a>
+
+                </td>
+
+            </tr>
+
+            {% empty %}
+
+            <tr>
+                <td colspan="3">
+                    No groups found
+                </td>
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block page_title %}
+SMS Details
+{% endblock %}
+
+{% block content %}
+
+<div class="bg-white dark:bg-[#172033] rounded-xl p-6">
+
+    <h2 class="text-xl font-bold mb-6">
+        SMS Details
+    </h2>
+
+    <p>
+        <strong>Campaign:</strong>
+        {{ sms.campaign }}
+    </p>
+
+    <p>
+        <strong>Contact:</strong>
+        {{ sms.contact }}
+    </p>
+
+    <p>
+        <strong>Message:</strong>
+        {{ sms.message }}
+    </p>
+
+    <p>
+        <strong>Status:</strong>
+        {{ sms.status }}
+    </p>
+
+    <p>
+        <strong>Created:</strong>
+        {{ sms.created_at }}
+    </p>
+
+</div>
+
+{% endblock %}

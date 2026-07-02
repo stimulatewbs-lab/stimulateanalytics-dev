@@ -1,4 +1,5 @@
 from django.db import models
+from contacts.models import ContactGroup
 
 
 class Campaign(models.Model):
@@ -14,6 +15,11 @@ class Campaign(models.Model):
     )
 
     message = models.TextField()
+
+    target_groups = models.ManyToManyField(
+        ContactGroup,
+        blank=True
+    )
 
     status = models.CharField(
         max_length=20,

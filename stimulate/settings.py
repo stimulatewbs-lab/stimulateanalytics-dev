@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'contacts',
     'campaigns',
     'sms',
+    'reports',
 ]
 
 INSTALLED_APPS += [

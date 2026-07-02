@@ -3,7 +3,8 @@ from django.contrib.auth.decorators import login_required
 
 from .models import Campaign
 from .forms import CampaignForm
-
+from .models import ContactGroup
+from .forms import ContactGroupForm
 
 @login_required
 def campaign_list(request):

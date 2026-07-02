@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block page_title %}
+Campaign Report
+{% endblock %}
+
+{% block content %}
+
+<div class="bg-white rounded-xl p-6">
+
+    <h2 class="text-xl font-bold mb-6">
+        {{ campaign.name }}
+    </h2>
+
+    <p>Total: {{ total }}</p>
+    <p>Sent: {{ sent }}</p>
+    <p>Failed: {{ failed }}</p>
+    <p>Pending: {{ pending }}</p>
+    <p>Delivery Rate: {{ delivery_rate }}%</p>
+
+    <hr class="my-6">
+
+    <table class="w-full">
+
+        <thead>
+            <tr>
+                <th>Contact</th>
+                <th>Status</th>
+                <th>Sent At</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            {% for sms in messages %}
+
+            <tr>
+                <td>{{ sms.contact }}</td>
+                <td>{{ sms.status }}</td>
+                <td>{{ sms.sent_at }}</td>
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}

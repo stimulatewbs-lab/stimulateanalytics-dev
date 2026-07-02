@@ -4,6 +4,7 @@ from . import views
 app_name = 'sms'
 
 urlpatterns = [
+     path('', views.sms_list, name='sms_list'),
     path('send/', views.send_sms, name='send_sms'),
     path('history/', views.sms_history, name='sms_history'),
     path('<int:pk>/', views.sms_detail, name='sms_detail'),

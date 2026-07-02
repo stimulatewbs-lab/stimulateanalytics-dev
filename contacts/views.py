@@ -107,3 +107,108 @@ def contact_delete(request, pk):
             'contact': contact
         }
     )
+@login_required
+def group_list(request):
+
+    groups = ContactGroup.objects.all()
+
+    return render(
+        request,
+        'contacts/group_list.html',
+        {
+            'groups': groups
+        }
+    )
+
+
+@login_required
+def group_create(request):
+
+    if request.method == 'POST':
+
+        form = ContactGroupForm(
+            request.POST
+        )
+
+        if form.is_valid():
+
+            form.save()
+
+            return redirect(
+                'contacts:group_list'
+            )
+
+    else:
+
+        form = ContactGroupForm()
+
+    return render(
+        request,
+        'contacts/group_form.html',
+        {
+            'form': form
+        }
+    )
+
+
+@login_required
+def group_update(request, pk):
+
+    group = get_object_or_404(
+        ContactGroup,
+        pk=pk
+    )
+
+    if request.method == 'POST':
+
+        form = ContactGroupForm(
+            request.POST,
+            instance=group
+        )
+
+        if form.is_valid():
+
+            form.save()
+
+            return redirect(
+                'contacts:group_list'
+            )
+
+    else:
+
+        form = ContactGroupForm(
+            instance=group
+        )
+
+    return render(
+        request,
+        'contacts/group_form.html',
+        {
+            'form': form
+        }
+    )
+
+
+@login_required
+def group_delete(request, pk):
+
+    group = get_object_or_404(
+        ContactGroup,
+        pk=pk
+    )
+
+    if request.method == 'POST':
+
+        group.delete()
+
+        return redirect(
+            'contacts:group_list'
+        )
+
+    return render(
+        request,
+        'contacts/group_confirm_delete.html',
+        {
+            'group': group
+        }
+    )

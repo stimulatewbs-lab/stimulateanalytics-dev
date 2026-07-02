@@ -6,37 +6,37 @@ My Profile
 
 {% block content %}
 
-<div class="bg-white dark:bg-[#172033] rounded-xl p-6 shadow">
+<div class="bg-white dark:bg-[#172033] rounded-xl p-6">
 
     <h2 class="text-xl font-bold mb-6">
         User Profile
     </h2>
 
-    <div class="space-y-4">
+    <div class="space-y-3">
 
         <p>
             <strong>Username:</strong>
-            {{ user_obj.username }}
+            {{ request.user.username }}
         </p>
 
         <p>
             <strong>Email:</strong>
-            {{ user_obj.email }}
+            {{ request.user.email }}
         </p>
 
         <p>
             <strong>Role:</strong>
-            {{ user_obj.role }}
+            {{ request.user.role }}
         </p>
 
         <p>
             <strong>Phone:</strong>
-            {{ user_obj.phone }}
+            {{ request.user.phone }}
         </p>
 
         <p>
             <strong>Date Joined:</strong>
-            {{ user_obj.date_joined }}
+            {{ request.user.date_joined }}
         </p>
 
     </div>

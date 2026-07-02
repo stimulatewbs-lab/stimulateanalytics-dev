@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block page_title %}
+Delete Group
+{% endblock %}
+
+{% block content %}
+
+<div class="bg-white dark:bg-[#172033] rounded-xl p-6">
+
+    <h2 class="text-xl font-bold mb-6">
+        Delete Group
+    </h2>
+
+    <p>
+
+        Delete
+
+        <strong>
+            {{ group.name }}
+        </strong>
+
+        ?
+
+    </p>
+
+    <form method="post">
+
+        {% csrf_token %}
+
+        <button
+            type="submit"
+            class="
+                bg-red-600
+                text-white
+                px-4
+                py-2
+                rounded-lg
+            "
+        >
+            Delete
+        </button>
+
+    </form>
+
+</div>
+
+{% endblock %}

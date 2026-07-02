@@ -58,7 +58,7 @@ def profile_view(request):
 @login_required
 def user_list(request):
 
-    users = User.objects.all().order_by('username')
+    users = User.objects.all()
 
     return render(
         request,

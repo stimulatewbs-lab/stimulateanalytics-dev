@@ -28,4 +28,27 @@ urlpatterns = [
         views.contact_delete,
         name='contact_delete'
     ),
+    path(
+    'groups/',
+    views.group_list,
+    name='group_list'
+),
+
+path(
+    'groups/create/',
+    views.group_create,
+    name='group_create'
+),
+
+path(
+    'groups/<int:pk>/edit/',
+    views.group_update,
+    name='group_update'
+),
+
+path(
+    'groups/<int:pk>/delete/',
+    views.group_delete,
+    name='group_delete'
+),
 ]

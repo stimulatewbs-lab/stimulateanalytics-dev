@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block page_title %}
+SMS List
+{% endblock %}
+
+{% block content %}
+<div class="bg-white dark:bg-[#172033] rounded-xl p-6">
+    <div class="flex items-center justify-between mb-6">
+        <h2 class="text-xl font-bold">SMS Messages</h2>
+        <a href="{% url 'sms:send_sms' %}" class="bg-primary text-white px-4 py-2 rounded-lg">
+            Send SMS
+        </a>
+    </div>
+
+    <div class="overflow-x-auto">
+        <table class="w-full">
+            <thead>
+                <tr class="border-b">
+                    <th class="text-left py-2">Campaign</th>
+                    <th class="text-left py-2">Contact</th>
+                    <th class="text-left py-2">Status</th>
+                    <th class="text-left py-2">Created</th>
+                    <th class="text-left py-2">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for sms in sms_messages %}
+                <tr class="border-b">
+                    <td class="py-3">{{ sms.campaign }}</td>
+                    <td class="py-3">{{ sms.contact }}</td>
+                    <td class="py-3">{{ sms.get_status_display }}</td>
+                    <td class="py-3">{{ sms.created_at }}</td>
+                    <td class="py-3">
+                        <a href="{% url 'sms:sms_detail' sms.id %}" class="text-primary hover:underline">
+                            View
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="py-4 text-gray-500">No SMS messages found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

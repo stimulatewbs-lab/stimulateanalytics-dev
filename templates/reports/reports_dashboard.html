@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block page_title %}
+Delivery Reports
+{% endblock %}
+
+{% block content %}
+
+<div class="grid grid-cols-4 gap-4">
+
+    <div class="bg-white rounded-xl p-6">
+        <h3>Total SMS</h3>
+        <h1>{{ total }}</h1>
+    </div>
+
+    <div class="bg-white rounded-xl p-6">
+        <h3>Sent</h3>
+        <h1>{{ sent }}</h1>
+    </div>
+
+    <div class="bg-white rounded-xl p-6">
+        <h3>Failed</h3>
+        <h1>{{ failed }}</h1>
+    </div>
+
+    <div class="bg-white rounded-xl p-6">
+        <h3>Delivery %</h3>
+        <h1>{{ delivery_rate }}%</h1>
+    </div>
+
+</div>
+
+{% endblock %}
