@@ -1,7 +1,7 @@
 
 from django.contrib.auth.decorators import login_required
 
-
+from .forms import ContactForm, ContactGroupForm
 from django.shortcuts import (
     render,
     redirect,
@@ -9,7 +9,7 @@ from django.shortcuts import (
 )
 
 from .models import Contact,ContactGroup
-from .forms import ContactForm
+
 @login_required
 def contact_list(request):
 
