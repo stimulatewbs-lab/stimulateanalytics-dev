@@ -8,7 +8,7 @@ from django.shortcuts import (
     get_object_or_404
 )
 
-from .models import Contact
+from .models import Contact,ContactGroup
 from .forms import ContactForm
 @login_required
 def contact_list(request):
