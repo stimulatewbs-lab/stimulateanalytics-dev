@@ -7,36 +7,36 @@ from rest_framework_simplejwt.views import (
 )
 from django.conf import settings
 from django.conf.urls.static import static
-urlpatterns = [
 
+urlpatterns = [
     path('admin/', admin.site.urls),
-    
+
     # WEB APPS
     path('dashboard/', include('dashboard.urls')),
-  
     path('accounts/', include('accounts.urls')),
     path('contacts/', include('contacts.urls')),
     path('sms/', include('sms.urls')),
     path('campaigns/', include('campaigns.urls')),
     path('reports/', include('reports.urls')),
+ ]
     # JWT AUTH API
-    path(
+path(
         'api/token/',
         TokenObtainPairView.as_view(),
         name='token_obtain_pair'
     ),
 
-    path(
+path(
         'api/token/refresh/',
         TokenRefreshView.as_view(),
         name='token_refresh'
     ),
-    path(
+path(
         'logout/',
         auth_views.LogoutView.as_view(),
         name='logout'
     ),
-]
+
 if settings.DEBUG:
     urlpatterns += static(
         settings.MEDIA_URL,
