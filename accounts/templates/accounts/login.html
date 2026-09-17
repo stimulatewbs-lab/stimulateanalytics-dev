@@ -1,0 +1,92 @@
+{% extends "bet/base.html" %}
+
+{% block title %}
+    Login - BETFELLS
+{% endblock %}
+
+{% block content %}
+
+<div class="max-w-lg mx-auto">
+
+    <div class="bg-betblack-800 border border-betblack-700 rounded-lg p-6 shadow-lg">
+
+        <h1 class="text-2xl font-black text-white mb-2">
+            Login to BETFELLS
+        </h1>
+
+        <p class="text-gray-400 text-sm mb-6">
+            Enter your account credentials to continue.
+        </p>
+
+        {% if form.errors %}
+            <div class="mb-4 rounded-md bg-red-900/40 border border-red-700 px-4 py-3 text-sm text-red-300">
+                Your username or password is incorrect.
+            </div>
+        {% endif %}
+
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+
+            <div>
+                <label class="block text-sm text-gray-300 mb-2">
+                    Username
+                </label>
+
+                <input
+                    type="text"
+                    name="username"
+                    autocomplete="username"
+                    required
+                    class="w-full bg-betblack-900 border border-betblack-600 rounded-md px-4 py-3 text-white focus:outline-none focus:border-betorange-500"
+                >
+            </div>
+
+            <div>
+                <label class="block text-sm text-gray-300 mb-2">
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    name="password"
+                    autocomplete="current-password"
+                    required
+                    class="w-full bg-betblack-900 border border-betblack-600 rounded-md px-4 py-3 text-white focus:outline-none focus:border-betorange-500"
+                >
+            </div>
+
+            <input
+                type="hidden"
+                name="next"
+                value="{{ next }}"
+            >
+
+            <button
+                type="submit"
+                class="w-full bg-betorange-500 hover:bg-betorange-600 text-betblack-900 font-black py-3 rounded-md uppercase tracking-wide"
+            >
+                Login
+            </button>
+        </form>
+
+        <div class="flex justify-between gap-4 text-sm mt-5">
+            <a
+                href="#"
+                class="text-gray-400 hover:text-betorange-500"
+            >
+                Forgot password?
+            </a>
+
+            <a
+                href="{% url 'accounts:register' %}"
+                class="text-betorange-500 hover:underline"
+            >
+                Create account
+            </a>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

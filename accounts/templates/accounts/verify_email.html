@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Email - BETFELLS</title>
+</head>
+<body>
+    <h1>Verify your email</h1>
+
+    <p>
+        We sent a six-digit verification code to:
+        <strong>{{ email }}</strong>
+    </p>
+
+    {% if messages %}
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+
+        <label for="code">Verification code</label>
+        <input
+            type="text"
+            id="code"
+            name="code"
+            maxlength="6"
+            minlength="6"
+            pattern="[0-9]{6}"
+            inputmode="numeric"
+            required
+        >
+
+        <button type="submit">
+            Verify email
+        </button>
+    </form>
+</body>
+</html>

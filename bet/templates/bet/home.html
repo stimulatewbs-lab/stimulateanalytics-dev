@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BetPro - Django Sportsbook</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+               {% extends "bet/base.html" %}
+
+{% block title %}
+    BetPro Home
+{% endblock %}
+
+{% block content %}
+
+<div class="bg-gradient-to-r from-betblack-800 to-betblack-900 border border-betorange-500/20 rounded-lg p-6 mb-6 flex justify-between items-center">
+
+    <div>
+        <span class="bg-betyellow-500 text-betblack-900 text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider inline-block mb-2">
+            New Player Offer
+        </span>
+
+        <h2 class="text-2xl font-black text-white uppercase italic">
+            100% First Deposit Match
+        </h2>
+
+        <p class="text-gray-400 text-sm mt-1">
+            Up to $200 in Free Bets for new registrations.
+        </p>
+    </div>
+
+    <button class="hidden sm:block bg-betblack-900 border border-betorange-500 text-betorange-500 hover:bg-betorange-500 hover:text-betblack-900 text-sm font-bold py-2 px-6 rounded uppercase">
+        Claim Bonus
+    </button>
+</div>
+
+<div class="flex gap-1 border-b border-betblack-700 mb-6 bg-betblack-800 p-1 rounded-t-lg inline-flex">
+    <button class="px-5 py-1.5 bg-betblack-600 text-white rounded text-sm font-semibold">
+        Live Now
+    </button>
+
+    <button class="px-5 py-1.5 text-gray-400 hover:text-white rounded text-sm">
+        Upcoming
+    </button>
+
+    <button class="px-5 py-1.5 text-gray-400 hover:text-white rounded text-sm">
+        Outrights
+    </button>
+</div>
+
+<h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+    <i class="fa-solid fa-circle text-betyellow-500 text-xs live-indicator"></i>
+    Live Football
+</h3>
+
+<div class="bg-betblack-800 rounded-lg border border-betblack-700 mb-4 shadow-lg">
+
+    <div class="bg-betblack-900 px-4 py-2 flex justify-between items-center text-xs border-b border-betblack-700">
+        <span class="flex items-center gap-2 text-gray-400">
+            <i class="fa-solid fa-trophy"></i>
+            Premier League
+        </span>
+
+        <span class="text-betyellow-500 font-bold live-indicator">
+            67:45
+        </span>
+    </div>
+
+    <div class="p-4 grid grid-cols-1 xl:grid-cols-12 gap-4 items-center">
+
+        <div class="xl:col-span-4 pr-4 xl:border-r border-betblack-700">
+            <div class="space-y-3">
+
+                <div class="flex justify-between items-center">
+                    <span class="font-bold text-white text-base">
+                        Arsenal
+                    </span>
+
+                    <span class="text-2xl font-black text-betorange-500">
+                        2
+                    </span>
+                </div>
+
+                <div class="flex justify-between items-center">
+                    <span class="font-medium text-gray-300 text-base">
+                        Chelsea
+                    </span>
+
+                    <span class="text-2xl font-black text-white">
+                        1
+                    </span>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="xl:col-span-5">
+
+            <div class="text-[10px] text-gray-500 mb-1.5 uppercase font-bold tracking-wider">
+                Match Result (1X2)
+            </div>
+
+            <div class="flex gap-2">
+
+                <button
+                    onclick="toggleBet('Arsenal', 'Match Result', '1.85', 'Arsenal vs Chelsea', this)"
+                    class="odd-btn flex-1 bg-betblack-900 border border-betblack-600 rounded-md py-2.5 px-3 flex justify-between items-center"
+                >
+                    <span class="text-xs text-gray-400 market-label">1</span>
+                    <span class="font-bold">1.85</span>
+                </button>
+
+                <button
+                    onclick="toggleBet('Draw', 'Match Result', '3.40', 'Arsenal vs Chelsea', this)"
+                    class="odd-btn flex-1 bg-betblack-900 border border-betblack-600 rounded-md py-2.5 px-3 flex justify-between items-center"
+                >
+                    <span class="text-xs text-gray-400 market-label">X</span>
+                    <span class="font-bold">3.40</span>
+                </button>
+
+                <button
+                    onclick="toggleBet('Chelsea', 'Match Result', '4.20', 'Arsenal vs Chelsea', this)"
+                    class="odd-btn flex-1 bg-betblack-900 border border-betblack-600 rounded-md py-2.5 px-3 flex justify-between items-center"
+                >
+                    <span class="text-xs text-gray-400 market-label">2</span>
+                    <span class="font-bold">4.20</span>
+                </button>
+
+            </div>
+        </div>
+
+        <div class="xl:col-span-3">
+
+            <div class="text-[10px] text-gray-500 mb-1.5 uppercase font-bold tracking-wider">
+                Total Goals (2.5)
+            </div>
+
+            <div class="flex gap-2">
+
+                <button
+                    onclick="toggleBet('Over 2.5', 'Total Goals', '1.65', 'Arsenal vs Chelsea', this)"
+                    class="odd-btn flex-1 bg-betblack-900 border border-betblack-600 rounded-md py-2.5 px-3 flex justify-between items-center"
+                >
+                    <span class="text-xs text-gray-400 market-label">Over</span>
+                    <span class="font-bold">1.65</span>
+                </button>
+
+                <button
+                    onclick="toggleBet('Under 2.5', 'Total Goals', '2.25', 'Arsenal vs Chelsea', this)"
+                    class="odd-btn flex-1 bg-betblack-900 border border-betblack-600 rounded-md py-2.5 px-3 flex justify-between items-center"
+                >
+                    <span class="text-xs text-gray-400 market-label">Under</span>
+                    <span class="font-bold">2.25</span>
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}         sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        // Professional Black/Dark Grey theme
+                        betblack: {
+                            900: '#09090b', // Deepest black (Background)
+                            800: '#18181b', // Surface (Cards, sidebars)
+                            700: '#27272a', // Lighter surface / borders
+                            600: '#3f3f46', // Dividers / inactive elements
+                        },
+                        // Vibrant Orange (Primary Action)
+                        betorange: {
+                            400: '#fb923c',
+                            500: '#f97316', // Main brand color
+                            600: '#ea580c', // Hover state
+                        },
+                        // High-contrast Yellow (Secondary / Highlights)
+                        betyellow: {
+                            400: '#facc15',
+                            500: '#eab308', // Highlights / Live badges
+                            600: '#ca8a04',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        
+        /* Custom scrollbar matching the dark theme */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #09090b; }
+        ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #f97316; }
+        
+        /* Betting odds button states */
+        .odd-btn {
+            transition: all 0.2s ease;
+        }
+        .odd-btn:hover:not(.selected) {
+            border-color: #f97316;
+            color: white;
+        }
+        .odd-btn.selected {
+            background-color: #f97316;
+            color: #09090b; /* Black text on orange for high contrast */
+            border-color: #f97316;
+            font-weight: bold;
+        }
+        .odd-btn.selected .market-label {
+            color: #000000;
+            opacity: 0.8;
+        }
+        
+        /* Animations */
+        @keyframes pulse-yellow {
+            0%, 100% { color: #eab308; }
+            50% { color: #fef08a; }
+        }
+        .live-indicator {
+            animation: pulse-yellow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+    </style>
+</head>
+<body class="bg-betblack-900 text-gray-200 h-screen flex flex-col overflow-hidden">
+
+    <!-- Top Navigation (Authentication, Wallet, User Profile) -->
+    <header class="bg-betblack-800 border-b border-betblack-700 h-16 flex items-center justify-between px-4 lg:px-6 shrink-0 z-20 sticky top-0 shadow-md shadow-black/50">
+        <div class="flex items-center gap-6">
+            <!-- Logo -->
+            <a href="#" class="text-2xl font-black text-white flex items-center gap-2 uppercase tracking-tighter">
+                <span class="text-betorange-500">BET</span>PRO
+            </a>
+            
+            <!-- Global Search -->
+            <div class="hidden md:flex relative w-72">
+                <input type="text" placeholder="Search events, teams..." class="w-full bg-betblack-900 text-sm border border-betblack-600 rounded-md pl-10 pr-4 py-2 focus:outline-none focus:border-betorange-500 focus:ring-1 focus:ring-betorange-500 transition text-white">
+                <i class="fa-solid fa-search absolute left-3 top-2.5 text-gray-400 text-sm"></i>
+            </div>
+        </div>
+
+        <!-- Wallet & Profile (MVP Phase 1) -->
+        <div class="flex items-center gap-4">
+            <!-- Wallet Display -->
+            <div class="hidden sm:flex flex-col items-end mr-2 border-r border-betblack-600 pr-4">
+                <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">Main Wallet</span>
+                <span class="text-sm font-bold text-betyellow-500">$ 2,450.00</span>
+            </div>
+            
+            <!-- Deposit Button -->
+            <button class="bg-betorange-500 hover:bg-betorange-600 text-betblack-900 text-sm font-bold py-2 px-5 rounded-md transition shadow-lg shadow-betorange-500/20 uppercase tracking-wide">
+                Deposit
+            </button>
+            
+            <!-- User Profile Dropdown Trigger -->
+            <div class="relative group cursor-pointer h-10 w-10 bg-betblack-700 hover:bg-betblack-600 rounded-full flex items-center justify-center border border-betblack-600 transition">
+                <i class="fa-solid fa-user text-gray-300"></i>
+                <!-- Status indicator (e.g., Verified) -->
+                <div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-betblack-800 rounded-full"></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Layout Workspace -->
+    <div class="flex flex-1 overflow-hidden relative">
+
+        <!-- Left Sidebar: Sports & Competitions (MVP Phase 1) -->
+        <aside class="w-60 bg-betblack-800 border-r border-betblack-700 flex-col hidden lg:flex overflow-y-auto">
+            <div class="p-3">
+                
+                <!-- Quick Links -->
+                <h3 class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2 px-2">Top Competitions</h3>
+                <ul class="space-y-1 mb-6">
+                    <li><a href="#" class="flex items-center gap-3 px-3 py-2 hover:bg-betblack-700 rounded-md text-sm transition text-gray-300 hover:text-white">
+                        <i class="fa-solid fa-trophy text-betyellow-500 w-4 text-center"></i> Premier League
+                    </a></li>
+                    <li><a href="#" class="flex items-center gap-3 px-3 py-2 hover:bg-betblack-700 rounded-md text-sm transition text-gray-300 hover:text-white">
+                        <i class="fa-solid fa-star text-betyellow-500 w-4 text-center"></i> Champions League
+                    </a></li>
+                    <li><a href="#" class="flex items-center gap-3 px-3 py-2 hover:bg-betblack-700 rounded-md text-sm transition text-gray-300 hover:text-white">
+                        <i class="fa-solid fa-basketball text-betorange-500 w-4 text-center"></i> NBA
+                    </a></li>
+                </ul>
+
+                <!-- Sports Navigation -->
+                <h3 class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2 px-2">All Sports</h3>
+                <ul class="space-y-1">
+                    <!-- Active State Example -->
+                    <li><a href="#" class="flex items-center justify-between px-3 py-2 bg-betblack-700 rounded-md text-sm font-semibold border-l-4 border-betorange-500 text-white shadow-sm">
+                        <span class="flex items-center gap-3"><i class="fa-solid fa-futbol text-betorange-500 w-4 text-center"></i> Football</span>
+                        <span class="text-[10px] bg-betblack-900 px-2 py-0.5 rounded text-gray-400">1,245</span>
+                    </a></li>
+                    <li><a href="#" class="flex items-center justify-between px-3 py-2 hover:bg-betblack-700 rounded-md text-sm transition text-gray-300">
+                        <span class="flex items-center gap-3"><i class="fa-solid fa-basketball text-gray-400 w-4 text-center"></i> Basketball</span>
+                        <span class="text-[10px] bg-betblack-900 px-2 py-0.5 rounded text-gray-400">342</span>
+                    </a></li>
+                    <li><a href="#" class="flex items-center justify-between px-3 py-2 hover:bg-betblack-700 rounded-md text-sm transition text-gray-300">
+                        <span class="flex items-center gap-3"><i class="fa-solid fa-baseball text-gray-400 w-4 text-center"></i> Tennis</span>
+                        <span class="text-[10px] bg-betblack-900 px-2 py-0.5 rounded text-gray-400">128</span>
+                    </a></li>
+                    <li><a href="#" class="flex items-center justify-between px-3 py-2 hover:bg-betblack-700 rounded-md text-sm transition text-gray-300">
+                        <span class="flex items-center gap-3"><i class="fa-solid fa-helmet-un text-gray-400 w-4 text-center"></i> Am. Football</span>
+                        <span class="text-[10px] bg-betblack-900 px-2 py-0.5 rounded text-gray-400">45</span>
+                    </a></li>
+                    <li><a href="#" class="flex items-center justify-between px-3 py-2 hover:bg-betblack-700 rounded-md text-sm transition text-gray-300">
+                        <span class="flex items-center gap-3"><i class="fa-solid fa-gamepad text-gray-400 w-4 text-center"></i> eSports</span>
+                        <span class="text-[10px] bg-betblack-900 px-2 py-0.5 rounded text-gray-400">89</span>
+                    </a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Center Content: Match Centre & Markets -->
+        <main class="flex-1 overflow-y-auto bg-betblack-900 p-4 lg:p-6 pb-24 relative">
+            
+            <!-- Welcome/Promo Banner -->
+            <div class="bg-gradient-to-r from-betblack-800 to-betblack-900 border border-betorange-500/20 rounded-lg p-6 mb-6 relative overflow-hidden flex justify-between items-center">
+                <div class="relative z-10">
+                    <span class="bg-betyellow-500 text-betblack-900 text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider mb-2 inline-block">New Player Offer</span>
+                    <h2 class="text-2xl font-black text-white mb-1 uppercase italic tracking-tight">100% First Deposit Match</h2>
+                    <p class="text-gray-400 text-sm">Up to $200 in Free Bets for new registrations.</p>
+                </div>
+                <div class="relative z-10 hidden sm:block">
+                    <button class="bg-betblack-900 border border-betorange-500 text-betorange-500 hover:bg-betorange-500 hover:text-betblack-900 text-sm font-bold py-2 px-6 rounded transition uppercase">Claim Bonus</button>
+                </div>
+                <!-- Background decor -->
+                <div class="absolute right-0 top-0 text-betorange-500/5 text-9xl -mt-8 -mr-8 rotate-12"><i class="fa-solid fa-bolt"></i></div>
+            </div>
+
+            <!-- Time/Status Filter Tabs -->
+            <div class="flex gap-1 border-b border-betblack-700 mb-6 bg-betblack-800 p-1 rounded-t-lg inline-flex">
+                <button class="px-5 py-1.5 bg-betblack-600 text-white rounded shadow text-sm font-semibold transition">Live Now</button>
+                <button class="px-5 py-1.5 text-gray-400 hover:text-white rounded text-sm font-medium transition">Upcoming</button>
+                <button class="px-5 py-1.5 text-gray-400 hover:text-white rounded text-sm font-medium transition">Outrights</button>
+            </div>
+
+            <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-circle text-betyellow-500 text-xs live-indicator"></i> Live Football
+            </h3>
+
+            <!-- Match Card 1 (Live) -->
+            <div class="bg-betblack-800 rounded-lg border border-betblack-700 mb-4 hover:border-betblack-600 transition shadow-lg">
+                <!-- Header -->
+                <div class="bg-betblack-900 px-4 py-2 flex justify-between items-center text-xs border-b border-betblack-700 rounded-t-lg">
+                    <span class="flex items-center gap-2 text-gray-400">
+                        <i class="fa-solid fa-trophy text-betblack-600"></i> Premier League
+                    </span>
+                    <div class="flex items-center gap-3">
+                        <span class="text-betyellow-500 font-bold live-indicator">67:45</span>
+                        <a href="#" class="text-gray-500 hover:text-betorange-500 transition"><i class="fa-solid fa-chart-simple"></i> Stats</a>
+                    </div>
+                </div>
+                
+                <!-- Main Body -->
+                <div class="p-4 grid grid-cols-1 xl:grid-cols-12 gap-4 items-center">
+                    
+                    <!-- Teams & Score -->
+                    <div class="col-span-1 xl:col-span-4 pr-4 xl:border-r border-betblack-700">
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center">
+                                <span class="font-bold text-white text-base">Arsenal</span>
+                                <span class="text-2xl font-black text-betorange-500">2</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="font-medium text-gray-300 text-base">Chelsea</span>
+                                <span class="text-2xl font-black text-white">1</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 1X2 Market (MVP Phase 1) -->
+                    <div class="col-span-1 xl:col-span-5">
+                        <div class="text-[10px] text-gray-500 mb-1.5 uppercase font-bold tracking-wider">Match Result (1X2)</div>
+                        <div class="flex gap-2">
+                            <button onclick="toggleBet('Arsenal', 'Match Result', '1.85', 'Arsenal vs Chelsea', this)" class="odd-btn flex-1 bg-betblack-900 border border-betblack-600 rounded-md py-2.5 px-3 flex justify-between items-center">
+                                <span class="text-xs text-gray-400 market-label">1</span>
+                                <span class="font-bold">1.85</span>
+                            </button>
+                            <button onclick="toggleBet('Draw', 'Match Result', '3.40', 'Arsenal vs Chelsea', this)" class="odd-btn flex-1 bg-betblack-900 border border-betblack-600 rounded-md py-2.5 px-3 flex justify-between items-center">
+                                <span class="text-xs text-gray-400 market-label">X</span>
+                                <span class="font-bold">3.40</span>
+                            </button>
+                            <button onclick="toggleBet('Chelsea', 'Match Result', '4.20', 'Arsenal vs Chelsea', this)" class="odd-btn flex-1 bg-betblack-900 border border-betblack-600 rounded-md py-2.5 px-3 flex justify-between items-center">
+                                <span class="text-xs text-gray-400 market-label">2</span>
+                                <span class="font-bold">4.20</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Over/Under Market -->
+                    <div class="col-span-1 xl:col-span-3">
+                        <div class="text-[10px] text-gray-500 mb-1.5 uppercase font-bold tracking-wider flex justify-between">
+                            <span>Total Goals (2.5)</span>
+                            <a href="#" class="text-betorange-500 hover:underline">+64 Markets</a>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="toggleBet('Over 2.5', 'Total Goals', '1.65', 'Arsenal vs Chelsea', this)" class="odd-btn flex-1 bg-betblack-900 border border-betblack-600 rounded-md py-2.5 px-3 flex justify-between items-center">
+                                <span class="text-xs text-gray-400 market-label">Over</span>
+                                <span class="font-bold">1.65</span>
+                            </button>
+                            <button onclick="toggleBet('Under 2.5', 'Total Goals', '2.25', 'Arsenal vs Chelsea', this)" class="odd-btn flex-1 bg-betblack-900 border border-betblack-600 rounded-md py-2.5 px-3 flex justify-between items-center">
+                                <span class="text-xs text-gray-400 market-label">Under</span>
+                                <span class="font-bold">2.25</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Match Card 2 (Upcoming) -->
+            <div class="bg-betblack-800 rounded-lg border border-betblack-700 mb-4 hover:border-betblack-600 transition shadow-lg opacity-90">
+                <div class="bg-betblack-900 px-4 py-2 flex justify-between items-center text-xs border-b border-betblack-700 rounded-t-lg text-gray-400">
+                    <span class="flex items-center gap-2"><i class="fa-solid fa-trophy text-betblack-600"></i> La Liga</span>
+                    <span>Today, 20:45</span>
+                </div>
+                <div class="p-4 grid grid-cols-1 xl:grid-cols-12 gap-4 items-center">
+                    <div class="col-span-1 xl:col-span-4 pr-4 xl:border-r border-betblack-700">
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center"><span class="font-medium text-white">Real Madrid</span><span>-</span></div>
+                            <div class="flex justify-between items-center"><span class="font-medium text-gray-300">Barcelona</span><span>-</span></div>
+                        </div>
+                    </div>
+                    <div class="col-span-1 xl:col-span-5">
+                        <div class="text-[10px] text-gray-500 mb-1.5 uppercase font-bold tracking-wider">Match Result (1X2)</div>
+                        <div class="flex gap-2">
+                            <button onclick="toggleBet('Real Madrid', 'Match Result', '2.10', 'Real Madrid vs Barcelona', this)" class="odd-btn flex-1 bg-betblack-900 border border-betblack-600 rounded-md py-2.5 px-3 flex justify-between items-center">
+                                <span class="text-xs text-gray-400 market-label">1</span><span class="font-bold">2.10</span>
+                            </button>
+                            <button onclick="toggleBet('Draw', 'Match Result', '3.50', 'Real Madrid vs Barcelona', this)" class="odd-btn flex-1 bg-betblack-900 border border-betblack-600 rounded-md py-2.5 px-3 flex justify-between items-center">
+                                <span class="text-xs text-gray-400 market-label">X</span><span class="font-bold">3.50</span>
+                            </button>
+                            <button onclick="toggleBet('Barcelona', 'Match Result', '2.95', 'Real Madrid vs Barcelona', this)" class="odd-btn flex-1 bg-betblack-900 border border-betblack-600 rounded-md py-2.5 px-3 flex justify-between items-center">
+                                <span class="text-xs text-gray-400 market-label">2</span><span class="font-bold">2.95</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-span-1 xl:col-span-3 text-right flex flex-col justify-end h-full pt-6">
+                        <a href="#" class="text-xs text-gray-400 hover:text-betorange-500 uppercase tracking-wider font-bold bg-betblack-900 py-2.5 rounded-md border border-betblack-600 hover:border-betorange-500 transition text-center block w-full">+124 Markets</a>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- Right Sidebar: Bet Slip (MVP Phase 1) -->
+        <aside class="w-80 bg-betblack-800 border-l border-betblack-700 flex flex-col z-30 shadow-[-5px_0_20px_-5px_rgba(0,0,0,0.5)]">
+            
+            <!-- Slip Header -->
+            <div class="flex items-center justify-between px-4 py-3 bg-betorange-500 text-betblack-900">
+                <h2 class="font-black flex items-center gap-2 uppercase tracking-wide">
+                    Betslip 
+                    <span id="slipCount" class="bg-betblack-900 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full ml-1 font-bold shadow">0</span>
+                </h2>
+                <button class="text-betblack-900 hover:text-white transition" onclick="clearSlip()" title="Clear all">
+                    <i class="fa-solid fa-trash-can text-sm"></i>
+                </button>
+            </div>
+
+            <!-- Bet Type Tabs (Single vs Multiple - Req for Phase 1) -->
+            <div class="flex bg-betblack-900 text-sm font-semibold border-b border-betblack-700 text-center">
+                <button id="tabSingle" onclick="setBetType('single')" class="flex-1 py-3 text-white border-b-2 border-betorange-500 bg-betblack-800">Singles</button>
+                <button id="tabMultiple" onclick="setBetType('multiple')" class="flex-1 py-3 text-gray-500 hover:text-gray-300 border-b-2 border-transparent">Multiple</button>
+            </div>
+
+            <!-- Selected Bets Area -->
+            <div id="betSlipContent" class="flex-1 overflow-y-auto p-3 space-y-3 bg-betblack-900">
+                
+                <!-- Empty State -->
+                <div id="emptySlip" class="text-center py-16 text-betblack-600 flex flex-col items-center justify-center h-full">
+                    <i class="fa-solid fa-ticket-simple text-5xl mb-4 opacity-50"></i>
+                    <p class="text-gray-400 font-medium">Your betslip is empty.</p>
+                    <p class="text-xs text-gray-500 mt-2">Click on odds to add selections.</p>
+                </div>
+                
+                <!-- Dynamic Items Injected Here -->
+            </div>
+
+            <!-- Stake & Summary Footer -->
+            <div class="bg-betblack-800 border-t border-betblack-700 p-4">
+                
+                <!-- Multiplier Summary (Only shows for Multiple bets) -->
+                <div id="multipleSummary" class="hidden mb-3 pb-3 border-b border-betblack-700">
+                    <div class="flex justify-between items-center text-sm">
+                        <span class="text-gray-400">Total Odds</span>
+                        <span id="totalOdds" class="font-black text-white text-lg">0.00</span>
+                    </div>
+                </div>
+                
+                <!-- Global/Multiple Stake Input -->
+                <div class="relative mb-4">
+                    <span class="absolute left-3 top-3 text-gray-400 text-sm font-bold">$</span>
+                    <input type="number" id="globalStake" placeholder="Total Stake" class="w-full bg-betblack-900 border border-betblack-600 rounded-md py-2.5 pl-8 pr-16 focus:outline-none focus:border-betorange-500 text-white font-bold text-lg" oninput="calculateReturn()">
+                    <button onclick="document.getElementById('globalStake').value='50'; calculateReturn()" class="absolute right-2 top-2 text-[10px] font-bold bg-betblack-700 hover:bg-betblack-600 px-2 py-1 rounded text-gray-300">MAX</button>
+                </div>
+
+                <!-- Returns -->
+                <div class="flex justify-between items-center text-sm mb-4">
+                    <span class="text-gray-400 font-medium">Est. Payout</span>
+                    <span id="potentialReturn" class="font-black text-betorange-500 text-xl">$ 0.00</span>
+                </div>
+
+                <!-- Action -->
+                <button class="w-full bg-betorange-500 hover:bg-betorange-600 text-betblack-900 font-black py-3.5 rounded-md uppercase tracking-widest transition shadow-lg shadow-betorange-500/20 active:scale-[0.98]">
+                    Place Bet
+                </button>
+                
+                <!-- Compliance (Phase 1 Req) -->
+                <div class="text-center mt-4 text-[9px] text-gray-500 uppercase tracking-widest flex justify-center gap-2 items-center">
+                    <i class="fa-solid fa-shield-halved"></i> 18+ Responsible Gambling
+                </div>
+            </div>
+        </aside>
+
+    </div>
+
+    <!-- Vanilla JS Logic for UI interactions (Can be replaced by Django form posts/HTMX later) -->
+    <script>
+        let betSlip = [];
+        let betType = 'single'; // 'single' or 'multiple'
+
+        // Switch between Singles and Multiple accumulator views
+        function setBetType(type) {
+            betType = type;
+            
+            const tabSingle = document.getElementById('tabSingle');
+            const tabMultiple = document.getElementById('tabMultiple');
+            const multSummary = document.getElementById('multipleSummary');
+            
+            if(type === 'single') {
+                tabSingle.classList.add('text-white', 'border-betorange-500', 'bg-betblack-800');
+                tabSingle.classList.remove('text-gray-500', 'border-transparent');
+                tabMultiple.classList.remove('text-white', 'border-betorange-500', 'bg-betblack-800');
+                tabMultiple.classList.add('text-gray-500', 'border-transparent');
+                multSummary.classList.add('hidden');
+            } else {
+                tabMultiple.classList.add('text-white', 'border-betorange-500', 'bg-betblack-800');
+                tabMultiple.classList.remove('text-gray-500', 'border-transparent');
+                tabSingle.classList.remove('text-white', 'border-betorange-500', 'bg-betblack-800');
+                tabSingle.classList.add('text-gray-500', 'border-transparent');
+                multSummary.classList.remove('hidden');
+            }
+            
+            updateSlipUI();
+        }
+
+        // Add/Remove bet from UI
+        function toggleBet(selection, market, odds, event, element) {
+            const uniqueId = `${event}-${market}-${selection}`;
+            const existsIndex = betSlip.findIndex(bet => bet.id === uniqueId);
+            
+            if (existsIndex > -1) {
+                betSlip.splice(existsIndex, 1);
+                element.classList.remove('selected');
+            } else {
+                betSlip.push({ 
+                    id: uniqueId, 
+                    selection, 
+                    market, 
+                    event,
+                    odds: parseFloat(odds), 
+                    domElement: element 
+                });
+                element.classList.add('selected');
+                
+                // If more than 1 bet is added, suggest switching to Multiple
+                if (betSlip.length > 1 && betType === 'single') {
+                    setBetType('multiple');
+                    return; // updateSlipUI called in setBetType
+                }
+            }
+            
+            updateSlipUI();
+        }
+
+        // Remove from list via cross button
+        function removeBet(id) {
+            const betToRemove = betSlip.find(bet => bet.id === id);
+            if (betToRemove && betToRemove.domElement) {
+                betToRemove.domElement.classList.remove('selected');
+            }
+            betSlip = betSlip.filter(bet => bet.id !== id);
+            
+            if (betSlip.length <= 1 && betType === 'multiple') {
+                setBetType('single');
+            } else {
+                updateSlipUI();
+            }
+        }
+
+        function clearSlip() {
+            betSlip.forEach(bet => {
+                if(bet.domElement) bet.domElement.classList.remove('selected');
+            });
+            betSlip = [];
+            document.getElementById('globalStake').value = '';
+            setBetType('single'); // Defaults back
+        }
+
+        // Re-render the HTML slip
+        function updateSlipUI() {
+            const slipContainer = document.getElementById('betSlipContent');
+            const emptySlip = document.getElementById('emptySlip');
+            const countBadge = document.getElementById('slipCount');
+            const totalOddsDisplay = document.getElementById('totalOdds');
+            
+            countBadge.innerText = betSlip.length;
+
+            // Clear dynamic items, keep empty state
+            Array.from(slipContainer.children).forEach(child => {
+                if(child.id !== 'emptySlip') child.remove();
+            });
+
+            if (betSlip.length === 0) {
+                emptySlip.style.display = 'flex';
+                totalOddsDisplay.innerText = "0.00";
+            } else {
+                emptySlip.style.display = 'none';
+                
+                let totalOdds = 1;
+
+                betSlip.forEach(bet => {
+                    totalOdds *= bet.odds;
+                    
+                    // Singular Stake Input (Only show if in Single mode)
+                    const singleStakeInput = betType === 'single' ? `
+                        <div class="mt-3 relative">
+                            <span class="absolute left-2 top-1.5 text-gray-500 text-xs">$</span>
+                            <input type="number" placeholder="Stake" class="w-full bg-betblack-900 border border-betblack-600 rounded py-1 pl-6 pr-2 text-sm text-white focus:border-betorange-500 focus:outline-none" oninput="calculateReturn()">
+                        </div>
+                    ` : '';
+
+                    const itemHTML = `
+                        <div class="bg-betblack-800 p-3 rounded-md border border-betblack-700 relative shadow-sm border-l-4 border-l-betorange-500">
+                            <button onclick="removeBet('${bet.id}')" class="absolute top-2 right-2 text-betblack-600 hover:text-white transition"><i class="fa-solid fa-times text-sm"></i></button>
+                            <div class="text-[10px] text-gray-400 mb-1 leading-tight w-11/12 truncate">${bet.event}</div>
+                            <div class="text-[11px] text-betyellow-500 uppercase tracking-wider mb-0.5">${bet.market}</div>
+                            <div class="flex justify-between items-end">
+                                <div class="font-bold text-sm text-white">${bet.selection}</div>
+                                <div class="font-black text-betorange-500">${bet.odds.toFixed(2)}</div>
+                            </div>
+                            ${singleStakeInput}
+                        </div>
+                    `;
+                    slipContainer.insertAdjacentHTML('beforeend', itemHTML);
+                });
+
+                totalOddsDisplay.innerText = totalOdds.toFixed(2);
+            }
+            calculateReturn();
+        }
+
+        // Calculate based on single or multiple mode
+        function calculateReturn() {
+            const globalStake = parseFloat(document.getElementById('globalStake').value) || 0;
+            const payoutDisplay = document.getElementById('potentialReturn');
+            
+            if (betSlip.length === 0) {
+                payoutDisplay.innerText = `$ 0.00`;
+                return;
+            }
+
+            if (betType === 'multiple') {
+                const totalOdds = parseFloat(document.getElementById('totalOdds').innerText) || 0;
+                const returns = globalStake * totalOdds;
+                payoutDisplay.innerText = `$ ${returns.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            } else {
+                // In single mode, the global stake applies to ALL singles simultaneously in standard UIs,
+                // OR we calculate based on individual inputs. 
+                // For this MVP UI demo, we multiply global stake * each odd and sum it up.
+                let totalReturns = 0;
+                betSlip.forEach(bet => {
+                    totalReturns += globalStake * bet.odds;
+                });
+                payoutDisplay.innerText = `$ ${totalReturns.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            }
+        }
+    </script>
+</body>
+</html>

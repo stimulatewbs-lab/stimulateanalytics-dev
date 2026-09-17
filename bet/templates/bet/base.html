@@ -1,0 +1,703 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}BetPro - Django Sportsbook{% endblock %}</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ["Inter", "sans-serif"],
+                    },
+
+                    colors: {
+                        betblack: {
+                            900: "#09090b",
+                            800: "#18181b",
+                            700: "#27272a",
+                            600: "#3f3f46",
+                        },
+
+                        betorange: {
+                            400: "#fb923c",
+                            500: "#f97316",
+                            600: "#ea580c",
+                        },
+
+                        betyellow: {
+                            400: "#facc15",
+                            500: "#eab308",
+                            600: "#ca8a04",
+                        },
+                    },
+                },
+            },
+        };
+    </script>
+
+    <style>
+        body {
+            font-family: "Inter", sans-serif;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #09090b;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #3f3f46;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #f97316;
+        }
+
+        .odd-btn {
+            transition: all 0.2s ease;
+        }
+
+        .odd-btn:hover:not(.selected) {
+            border-color: #f97316;
+            color: white;
+        }
+
+        .odd-btn.selected {
+            background-color: #f97316;
+            color: #09090b;
+            border-color: #f97316;
+            font-weight: bold;
+        }
+
+        .odd-btn.selected .market-label {
+            color: #000000;
+            opacity: 0.8;
+        }
+
+        @keyframes pulse-yellow {
+            0%, 100% {
+                color: #eab308;
+            }
+
+            50% {
+                color: #fef08a;
+            }
+        }
+
+        .live-indicator {
+            animation: pulse-yellow 2s infinite;
+        }
+    </style>
+
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body class="bg-betblack-900 text-gray-200 min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-betblack-800 border-b border-betblack-700 h-16 flex items-center justify-between px-4 lg:px-6 shrink-0 z-20 shadow-md shadow-black/50">
+
+        <div class="flex items-center gap-6">
+
+            <!-- Logo -->
+            <a
+                href="{% url 'home' %}"
+                class="text-2xl font-black text-white flex items-center gap-2 uppercase tracking-tighter"
+            >
+                <span class="text-betorange-500">BET</span>PRO
+            </a>
+
+            <!-- Search -->
+            <div class="hidden md:flex relative w-72">
+                <input
+                    type="text"
+                    placeholder="Search events, teams..."
+                    class="w-full bg-betblack-900 text-sm border border-betblack-600 rounded-md pl-10 pr-4 py-2 focus:outline-none focus:border-betorange-500 focus:ring-1 focus:ring-betorange-500 text-white"
+                >
+
+                <i class="fa-solid fa-search absolute left-3 top-2.5 text-gray-400 text-sm"></i>
+            </div>
+        </div>
+
+        <!-- Wallet and User -->
+        <div class="flex items-center gap-4">
+
+            <div class="hidden sm:flex flex-col items-end mr-2 border-r border-betblack-600 pr-4">
+                <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">
+                    Main Wallet
+                </span>
+
+                <span class="text-sm font-bold text-betyellow-500">
+                    $ 2,450.00
+                </span>
+            </div>
+
+            <button
+                type="button"
+                class="bg-betorange-500 hover:bg-betorange-600 text-betblack-900 text-sm font-bold py-2 px-5 rounded-md transition uppercase tracking-wide"
+            >
+                Deposit
+            </button>
+
+            <div class="relative h-10 w-10 bg-betblack-700 hover:bg-betblack-600 rounded-full flex items-center justify-center border border-betblack-600">
+                <i class="fa-solid fa-user text-gray-300"></i>
+
+                <div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-betblack-800 rounded-full"></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <div class="flex flex-1 overflow-hidden">
+
+        <!-- Left Sidebar -->
+        <aside class="w-60 bg-betblack-800 border-r border-betblack-700 hidden lg:flex flex-col overflow-y-auto">
+
+            <div class="p-3">
+
+                <h3 class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2 px-2">
+                    Top Competitions
+                </h3>
+
+                <ul class="space-y-1 mb-6">
+
+                    <li>
+                        <a href="#" class="flex items-center gap-3 px-3 py-2 hover:bg-betblack-700 rounded-md text-sm text-gray-300 hover:text-white">
+                            <i class="fa-solid fa-trophy text-betyellow-500 w-4 text-center"></i>
+                            Premier League
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="flex items-center gap-3 px-3 py-2 hover:bg-betblack-700 rounded-md text-sm text-gray-300 hover:text-white">
+                            <i class="fa-solid fa-star text-betyellow-500 w-4 text-center"></i>
+                            Champions League
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="flex items-center gap-3 px-3 py-2 hover:bg-betblack-700 rounded-md text-sm text-gray-300 hover:text-white">
+                            <i class="fa-solid fa-basketball text-betorange-500 w-4 text-center"></i>
+                            NBA
+                        </a>
+                    </li>
+
+                </ul>
+
+                <h3 class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2 px-2">
+                    All Sports
+                </h3>
+
+                <ul class="space-y-1">
+
+                    <li>
+                        <a href="#" class="flex items-center justify-between px-3 py-3 bg-betblack-700 rounded-md text-sm font-semibold border-l-4 border-betorange-500 text-white">
+                            <span class="flex items-center gap-3">
+                                <i class="fa-solid fa-futbol text-betorange-500 w-4 text-center"></i>
+                                Football
+                            </span>
+
+                            <span class="text-[10px] bg-betblack-900 px-2 py-1 rounded text-gray-400">
+                                1,245
+                            </span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="flex items-center justify-between px-3 py-3 hover:bg-betblack-700 rounded-md text-sm text-gray-300">
+                            <span class="flex items-center gap-3">
+                                <i class="fa-solid fa-basketball text-gray-400 w-4 text-center"></i>
+                                Basketball
+                            </span>
+
+                            <span class="text-[10px] bg-betblack-900 px-2 py-1 rounded text-gray-400">
+                                342
+                            </span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="flex items-center justify-between px-3 py-3 hover:bg-betblack-700 rounded-md text-sm text-gray-300">
+                            <span class="flex items-center gap-3">
+                                <i class="fa-solid fa-baseball text-gray-400 w-4 text-center"></i>
+                                Tennis
+                            </span>
+
+                            <span class="text-[10px] bg-betblack-900 px-2 py-1 rounded text-gray-400">
+                                128
+                            </span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="flex items-center justify-between px-3 py-3 hover:bg-betblack-700 rounded-md text-sm text-gray-300">
+                            <span class="flex items-center gap-3">
+                                <i class="fa-solid fa-helmet-un text-gray-400 w-4 text-center"></i>
+                                Am. Football
+                            </span>
+
+                            <span class="text-[10px] bg-betblack-900 px-2 py-1 rounded text-gray-400">
+                                45
+                            </span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="flex items-center justify-between px-3 py-3 hover:bg-betblack-700 rounded-md text-sm text-gray-300">
+                            <span class="flex items-center gap-3">
+                                <i class="fa-solid fa-gamepad text-gray-400 w-4 text-center"></i>
+                                eSports
+                            </span>
+
+                            <span class="text-[10px] bg-betblack-900 px-2 py-1 rounded text-gray-400">
+                                89
+                            </span>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Center Content -->
+        <main class="flex-1 overflow-y-auto bg-betblack-900 p-4 lg:p-6 pb-24">
+
+            {% block content %}
+
+            <!-- Default welcome banner -->
+            <div class="bg-gradient-to-r from-betblack-800 to-betblack-900 border border-betorange-500/20 rounded-lg p-6 mb-6 flex justify-between items-center">
+
+                <div>
+                    <span class="bg-betyellow-500 text-betblack-900 text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider inline-block mb-2">
+                        New Player Offer
+                    </span>
+
+                    <h2 class="text-2xl font-black text-white uppercase italic">
+                        100% First Deposit Match
+                    </h2>
+
+                    <p class="text-gray-400 text-sm mt-1">
+                        Up to $200 in Free Bets for new registrations.
+                    </p>
+                </div>
+
+                <button class="hidden sm:block bg-betblack-900 border border-betorange-500 text-betorange-500 hover:bg-betorange-500 hover:text-betblack-900 text-sm font-bold py-2 px-6 rounded uppercase">
+                    Claim Bonus
+                </button>
+            </div>
+
+            {% endblock %}
+
+        </main>
+
+        <!-- Right Betslip -->
+        <aside class="w-80 bg-betblack-800 border-l border-betblack-700 hidden xl:flex flex-col shadow-[-5px_0_20px_-5px_rgba(0,0,0,0.5)]">
+
+            <!-- Betslip Header -->
+            <div class="flex items-center justify-between px-4 py-3 bg-betorange-500 text-betblack-900">
+
+                <h2 class="font-black flex items-center gap-2 uppercase tracking-wide">
+                    Betslip
+
+                    <span
+                        id="slipCount"
+                        class="bg-betblack-900 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full"
+                    >
+                        0
+                    </span>
+                </h2>
+
+                <button
+                    type="button"
+                    onclick="clearSlip()"
+                    class="hover:text-white"
+                    title="Clear all bets"
+                >
+                    <i class="fa-solid fa-trash-can text-sm"></i>
+                </button>
+            </div>
+
+            <!-- Bet Type Tabs -->
+            <div class="flex bg-betblack-900 text-sm font-semibold border-b border-betblack-700 text-center">
+
+                <button
+                    id="tabSingle"
+                    type="button"
+                    onclick="setBetType('single')"
+                    class="flex-1 py-3 text-white border-b-2 border-betorange-500 bg-betblack-800"
+                >
+                    Singles
+                </button>
+
+                <button
+                    id="tabMultiple"
+                    type="button"
+                    onclick="setBetType('multiple')"
+                    class="flex-1 py-3 text-gray-500 border-b-2 border-transparent"
+                >
+                    Multiple
+                </button>
+            </div>
+
+            <!-- Selected Bets -->
+            <div
+                id="betSlipContent"
+                class="flex-1 overflow-y-auto p-3 space-y-3 bg-betblack-900"
+            >
+
+                <div
+                    id="emptySlip"
+                    class="text-center py-16 text-betblack-600 flex flex-col items-center justify-center h-full"
+                >
+                    <i class="fa-solid fa-ticket-simple text-5xl mb-4 opacity-50"></i>
+
+                    <p class="text-gray-400 font-medium">
+                        Your betslip is empty.
+                    </p>
+
+                    <p class="text-xs text-gray-500 mt-2">
+                        Click on odds to add selections.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Betslip Footer -->
+            <div class="bg-betblack-800 border-t border-betblack-700 p-4">
+
+                <div id="multipleSummary" class="hidden mb-3 pb-3 border-b border-betblack-700">
+                    <div class="flex justify-between items-center text-sm">
+                        <span class="text-gray-400">Total Odds</span>
+
+                        <span id="totalOdds" class="font-black text-white text-lg">
+                            0.00
+                        </span>
+                    </div>
+                </div>
+
+                <div class="relative mb-4">
+                    <span class="absolute left-3 top-3 text-gray-400 text-sm font-bold">
+                        $
+                    </span>
+
+                    <input
+                        type="number"
+                        id="globalStake"
+                        placeholder="Total Stake"
+                        oninput="calculateReturn()"
+                        class="w-full bg-betblack-900 border border-betblack-600 rounded-md py-2.5 pl-8 pr-16 focus:outline-none focus:border-betorange-500 text-white font-bold text-lg"
+                    >
+
+                    <button
+                        type="button"
+                        onclick="setMaximumStake()"
+                        class="absolute right-2 top-2 text-[10px] font-bold bg-betblack-700 hover:bg-betblack-600 px-2 py-1 rounded text-gray-300"
+                    >
+                        MAX
+                    </button>
+                </div>
+
+                <div class="flex justify-between items-center text-sm mb-4">
+                    <span class="text-gray-400 font-medium">
+                        Est. Payout
+                    </span>
+
+                    <span id="potentialReturn" class="font-black text-betorange-500 text-xl">
+                        $ 0.00
+                    </span>
+                </div>
+
+                <button
+                    type="button"
+                    onclick="placeBet()"
+                    class="w-full bg-betorange-500 hover:bg-betorange-600 text-betblack-900 font-black py-3.5 rounded-md uppercase tracking-widest transition"
+                >
+                    Place Bet
+                </button>
+
+                <div class="text-center mt-4 text-[9px] text-gray-500 uppercase tracking-widest flex justify-center gap-2 items-center">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    18+ Responsible Gambling
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        let betSlip = [];
+        let betType = "single";
+
+        function setBetType(type) {
+            betType = type;
+
+            const tabSingle = document.getElementById("tabSingle");
+            const tabMultiple = document.getElementById("tabMultiple");
+            const multipleSummary = document.getElementById("multipleSummary");
+
+            if (type === "single") {
+                tabSingle.classList.add(
+                    "text-white",
+                    "border-betorange-500",
+                    "bg-betblack-800"
+                );
+
+                tabSingle.classList.remove(
+                    "text-gray-500",
+                    "border-transparent"
+                );
+
+                tabMultiple.classList.remove(
+                    "text-white",
+                    "border-betorange-500",
+                    "bg-betblack-800"
+                );
+
+                tabMultiple.classList.add(
+                    "text-gray-500",
+                    "border-transparent"
+                );
+
+                multipleSummary.classList.add("hidden");
+            } else {
+                tabMultiple.classList.add(
+                    "text-white",
+                    "border-betorange-500",
+                    "bg-betblack-800"
+                );
+
+                tabMultiple.classList.remove(
+                    "text-gray-500",
+                    "border-transparent"
+                );
+
+                tabSingle.classList.remove(
+                    "text-white",
+                    "border-betorange-500",
+                    "bg-betblack-800"
+                );
+
+                tabSingle.classList.add(
+                    "text-gray-500",
+                    "border-transparent"
+                );
+
+                multipleSummary.classList.remove("hidden");
+            }
+
+            updateSlipUI();
+        }
+
+        function toggleBet(selection, market, odds, event, element) {
+            const uniqueId = `${event}-${market}-${selection}`;
+
+            const existingIndex = betSlip.findIndex(
+                bet => bet.id === uniqueId
+            );
+
+            if (existingIndex > -1) {
+                betSlip.splice(existingIndex, 1);
+                element.classList.remove("selected");
+            } else {
+                betSlip.push({
+                    id: uniqueId,
+                    selection: selection,
+                    market: market,
+                    event: event,
+                    odds: parseFloat(odds),
+                    domElement: element
+                });
+
+                element.classList.add("selected");
+
+                if (betSlip.length > 1 && betType === "single") {
+                    setBetType("multiple");
+                    return;
+                }
+            }
+
+            updateSlipUI();
+        }
+
+        function removeBet(id) {
+            const bet = betSlip.find(item => item.id === id);
+
+            if (bet && bet.domElement) {
+                bet.domElement.classList.remove("selected");
+            }
+
+            betSlip = betSlip.filter(item => item.id !== id);
+
+            if (betSlip.length <= 1 && betType === "multiple") {
+                setBetType("single");
+            } else {
+                updateSlipUI();
+            }
+        }
+
+        function clearSlip() {
+            betSlip.forEach(bet => {
+                if (bet.domElement) {
+                    bet.domElement.classList.remove("selected");
+                }
+            });
+
+            betSlip = [];
+
+            document.getElementById("globalStake").value = "";
+
+            setBetType("single");
+        }
+
+        function setMaximumStake() {
+            document.getElementById("globalStake").value = 50;
+            calculateReturn();
+        }
+
+        function updateSlipUI() {
+            const slipContainer = document.getElementById("betSlipContent");
+            const emptySlip = document.getElementById("emptySlip");
+            const countBadge = document.getElementById("slipCount");
+            const totalOddsDisplay = document.getElementById("totalOdds");
+
+            countBadge.innerText = betSlip.length;
+
+            Array.from(slipContainer.children).forEach(child => {
+                if (child.id !== "emptySlip") {
+                    child.remove();
+                }
+            });
+
+            if (betSlip.length === 0) {
+                emptySlip.style.display = "flex";
+                totalOddsDisplay.innerText = "0.00";
+                calculateReturn();
+                return;
+            }
+
+            emptySlip.style.display = "none";
+
+            let totalOdds = 1;
+
+            betSlip.forEach(bet => {
+                totalOdds *= bet.odds;
+
+                const item = document.createElement("div");
+
+                item.className =
+                    "bg-betblack-800 p-3 rounded-md border border-betblack-700 relative border-l-4 border-l-betorange-500";
+
+                item.innerHTML = `
+                    <button
+                        type="button"
+                        onclick="removeBet('${bet.id}')"
+                        class="absolute top-2 right-2 text-gray-500 hover:text-white"
+                    >
+                        <i class="fa-solid fa-times text-sm"></i>
+                    </button>
+
+                    <div class="text-[10px] text-gray-400 mb-1 pr-5 truncate">
+                        ${bet.event}
+                    </div>
+
+                    <div class="text-[11px] text-betyellow-500 uppercase tracking-wider mb-1">
+                        ${bet.market}
+                    </div>
+
+                    <div class="flex justify-between items-end">
+                        <div class="font-bold text-sm text-white">
+                            ${bet.selection}
+                        </div>
+
+                        <div class="font-black text-betorange-500">
+                            ${bet.odds.toFixed(2)}
+                        </div>
+                    </div>
+                `;
+
+                slipContainer.appendChild(item);
+            });
+
+            totalOddsDisplay.innerText = totalOdds.toFixed(2);
+
+            calculateReturn();
+        }
+
+        function calculateReturn() {
+            const stake =
+                parseFloat(document.getElementById("globalStake").value) || 0;
+
+            const payoutDisplay = document.getElementById("potentialReturn");
+
+            if (betSlip.length === 0) {
+                payoutDisplay.innerText = "$ 0.00";
+                return;
+            }
+
+            if (betType === "multiple") {
+                const totalOdds =
+                    parseFloat(document.getElementById("totalOdds").innerText) || 0;
+
+                const payout = stake * totalOdds;
+
+                payoutDisplay.innerText =
+                    "$ " + payout.toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    });
+            } else {
+                let totalReturns = 0;
+
+                betSlip.forEach(bet => {
+                    totalReturns += stake * bet.odds;
+                });
+
+                payoutDisplay.innerText =
+                    "$ " + totalReturns.toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    });
+            }
+        }
+
+        function placeBet() {
+            if (betSlip.length === 0) {
+                alert("Please select at least one betting option.");
+                return;
+            }
+
+            const stake =
+                parseFloat(document.getElementById("globalStake").value) || 0;
+
+            if (stake <= 0) {
+                alert("Please enter a valid stake.");
+                return;
+            }
+
+            alert("This is currently a UI demo. Django betting processing will be added later.");
+        }
+    </script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
