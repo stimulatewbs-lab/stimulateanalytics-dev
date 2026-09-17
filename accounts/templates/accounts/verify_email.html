@@ -4,39 +4,258 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verify Email - BETFELLS</title>
+    <style>
+        :root {
+            --bg-1: #090909;
+            --bg-2: #141414;
+            --bg-3: #1d1d1d;
+            --panel: rgba(20, 20, 20, 0.9);
+            --panel-alt: #111111;
+            --orange: #ff8a1d;
+            --orange-soft: #ffae5c;
+            --orange-deep: #db6900;
+            --text: #f5f5f5;
+            --muted: #c7c7c7;
+            --border: rgba(255, 138, 29, 0.35);
+            --input-bg: #1a1a1a;
+            --shadow: rgba(0, 0, 0, 0.55);
+            --warning-bg: rgba(255, 138, 29, 0.12);
+            --warning-text: #ffd5a0;
+            --warning-border: rgba(255, 138, 29, 0.5);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            font-family: Arial, Helvetica, sans-serif;
+            background:
+                radial-gradient(circle at top, rgba(255, 138, 29, 0.18), transparent 28%),
+                linear-gradient(135deg, var(--bg-1) 0%, var(--bg-2) 40%, var(--bg-3) 100%);
+            color: var(--text);
+        }
+
+        .auth-card {
+            width: 100%;
+            max-width: 520px;
+            padding: 40px 32px 32px;
+            background: linear-gradient(180deg, rgba(24, 24, 24, 0.96), rgba(15, 15, 15, 0.98));
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            box-shadow:
+                0 0 0 1px rgba(255, 138, 29, 0.1),
+                0 22px 60px var(--shadow),
+                0 0 32px rgba(255, 138, 29, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auth-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at top center, rgba(255, 138, 29, 0.08), transparent 42%);
+            pointer-events: none;
+        }
+
+        .brand-wrap {
+            text-align: center;
+            margin-bottom: 18px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .brand {
+            display: inline-block;
+            padding: 8px 18px;
+            border: 1px solid rgba(255, 138, 29, 0.4);
+            background: rgba(255, 138, 29, 0.08);
+            border-radius: 999px;
+            font-size: 0.78rem;
+            letter-spacing: 0.2em;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: var(--orange-soft);
+            box-shadow: 0 0 18px rgba(255, 138, 29, 0.12);
+        }
+
+        h1 {
+            margin: 0 0 16px;
+            text-align: center;
+            font-size: clamp(2rem, 4vw, 2.6rem);
+            line-height: 1.2;
+            color: var(--text);
+            position: relative;
+            z-index: 1;
+        }
+
+        .subtitle {
+            margin: 0 0 28px;
+            text-align: center;
+            color: var(--muted);
+            line-height: 1.7;
+            font-size: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .email {
+            display: inline-block;
+            color: var(--orange-soft);
+            font-weight: 700;
+            word-break: break-word;
+        }
+
+        .message-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 0 0 22px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .message-box {
+            margin: 0;
+            padding: 12px 14px;
+            border: 1px solid var(--warning-border);
+            background: var(--warning-bg);
+            border-left: 4px solid var(--orange);
+            border-radius: 10px;
+            color: var(--warning-text);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            position: relative;
+            z-index: 1;
+        }
+
+        label {
+            font-size: 0.93rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        input {
+            width: 100%;
+            border: 1px solid rgba(255,255,255,0.09);
+            background: var(--input-bg);
+            color: var(--text);
+            border-radius: 12px;
+            padding: 16px 14px;
+            font-size: 1.1rem;
+            letter-spacing: 0.4em;
+            text-align: center;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        input::placeholder {
+            color: rgba(255,255,255,0.35);
+            letter-spacing: 0.2em;
+        }
+
+        input:focus {
+            border-color: var(--orange);
+            box-shadow: 0 0 0 4px rgba(255, 138, 29, 0.14);
+        }
+
+        button {
+            border: none;
+            cursor: pointer;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--orange) 0%, var(--orange-deep) 100%);
+            color: #1a0f08;
+            font-size: 1rem;
+            font-weight: 900;
+            padding: 16px 18px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 14px 28px rgba(255, 138, 29, 0.28);
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 18px 34px rgba(255, 138, 29, 0.35);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        @media (max-width: 480px) {
+            .auth-card {
+                padding: 28px 20px 24px;
+                border-radius: 18px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .subtitle {
+                font-size: 0.95rem;
+            }
+
+            input {
+                letter-spacing: 0.25em;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>Verify your email</h1>
+    <div class="auth-card">
+        <div class="brand-wrap">
+            <span class="brand">BETFELLS</span>
+        </div>
 
-    <p>
-        We sent a six-digit verification code to:
-        <strong>{{ email }}</strong>
-    </p>
+        <h1>Verify your email</h1>
 
-    {% if messages %}
-        {% for message in messages %}
-            <p>{{ message }}</p>
-        {% endfor %}
-    {% endif %}
+        <p class="subtitle">
+            We sent a six-digit verification code to:<br>
+            <span class="email">{{ email }}</span>
+        </p>
 
-    <form method="post">
-        {% csrf_token %}
+        {% if messages %}
+            <div class="message-list">
+                {% for message in messages %}
+                    <p class="message-box">{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
 
-        <label for="code">Verification code</label>
-        <input
-            type="text"
-            id="code"
-            name="code"
-            maxlength="6"
-            minlength="6"
-            pattern="[0-9]{6}"
-            inputmode="numeric"
-            required
-        >
+        <form method="post">
+            {% csrf_token %}
 
-        <button type="submit">
-            Verify email
-        </button>
-    </form>
+            <label for="code">Verification code</label>
+            <input
+                type="text"
+                id="code"
+                name="code"
+                maxlength="6"
+                minlength="6"
+                pattern="[0-9]{6}"
+                inputmode="numeric"
+                required
+                placeholder="000000"
+                aria-label="Verification code"
+            >
+
+            <button type="submit">
+                Verify email
+            </button>
+        </form>
+    </div>
 </body>
 </html>
