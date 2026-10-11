@@ -1,6 +1,6 @@
 import secrets
 from datetime import timedelta
-
+from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import login
@@ -159,7 +159,7 @@ def verify_email(request):
                 "Your email has been verified successfully.",
             )
 
-            return redirect("home")
+            return redirect("dashboard")
 
     return render(
         request,
