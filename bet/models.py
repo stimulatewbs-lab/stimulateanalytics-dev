@@ -76,3 +76,31 @@ class Match(models.Model):
 
     def __str__(self):
         return f"{self.home_team} vs {self.away_team}"
+
+class MatchOdds(models.Model):
+    match = models.ForeignKey(
+        Match,
+        on_delete=models.CASCADE,
+        related_name="odds",
+    )
+    home_win = models.DecimalField(
+        max_digits=7,
+        decimal_places=2,
+    )
+    draw = models.DecimalField(
+        max_digits=7,
+        decimal_places=2,
+    )
+    away_win = models.DecimalField(
+        max_digits=7,
+        decimal_places=2,
+    )
+    is_active = models.BooleanField(default=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Match Odds"
+        verbose_name_plural = "Match Odds"
+
+    def __str__(self):
+        return f"{self.match} - Match Result Odds"

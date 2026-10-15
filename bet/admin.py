@@ -33,3 +33,23 @@ class MatchAdmin(admin.ModelAdmin):
     search_fields = ("home_team", "away_team")
     list_editable = ("status", "home_score", "away_score", "is_featured")
     date_hierarchy = "kickoff"
+
+from .models import MatchOdds
+
+
+@admin.register(MatchOdds)
+class MatchOddsAdmin(admin.ModelAdmin):
+    list_display = (
+        "match",
+        "home_win",
+        "draw",
+        "away_win",
+        "is_active",
+        "updated_at",
+    )
+    list_filter = ("is_active",)
+    search_fields = (
+        "match__home_team",
+        "match__away_team",
+    )
+    list_select_related = ("match",)
