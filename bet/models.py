@@ -104,3 +104,90 @@ class MatchOdds(models.Model):
 
     def __str__(self):
         return f"{self.match} - Match Result Odds"
+
+from django.conf import settings
+
+
+class Bet(models.Model):
+    class BetType(models.TextChoices):
+        SINGLE = "single", "Single"
+        MULTIPLE = "multiple", "Multiple"
+
+    class Status(models.TextChoices):
+        PENDING = "pending", "Pending"
+        WON = "won", "Won"
+        LOST = "lost", "Lost"
+        VOID = "void", "Void"
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="bets",
+    )
+
+    bet_type = models.CharField(
+        max_length=20,
+        choices=BetType.choices,
+        default=BetType.SINGLE,
+    )
+
+    stake = models.DecimalField(
+        max_digits=12,
+        decimal_places=2,
+    )
+
+    potential_payout = models.DecimalField(
+        max_digits=14,
+        decimal_places=2,
+        default=0,
+    )
+
+    status = models.CharField(
+        max_length=20,
+        choices=Status.choices,
+        default=Status.PENDING,
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        constraints = [
+            models.CheckConstraint(
+                condition=models.Q(stake__gt=0),
+                name="bet_stake_must_be_positive",
+            )
+        ]
+
+    def __str__(self):
+        return f"Bet #{self.pk} - {self.user}"
+
+
+class BetSelection(models.Model):
+    bet = models.ForeignKey(
+        Bet,
+        on_delete=models.CASCADE,
+        related_name="selections",
+    )
+
+    match = models.ForeignKey(
+        Match,
+        on_delete=models.PROTECT,
+        related_name="bet_selections",
+    )
+
+    market = models.CharField(max_length=100)
+    selection = models.CharField(max_length=150)
+
+    # Store the odds at the time the bet is submitted.
+    odds_at_placement = models.DecimalField(
+        max_digits=7,
+        decimal_places=2,
+    )
+
+    class Meta:
+        verbose_name = "Bet Selection"
+        verbose_name_plural = "Bet Selections"
+
+    def __str__(self):
+        return f"{self.match} - {self.selection}"

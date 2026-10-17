@@ -75,96 +75,125 @@
         </span>
     </div>
 
+    
+{% for match in matches %}
+    {% with odds=match.odds.all|first %}
+
     <div class="p-4 grid grid-cols-1 xl:grid-cols-12 gap-4 items-center">
 
+        <!-- Teams and scores -->
         <div class="xl:col-span-4 pr-4 xl:border-r border-betblack-700">
             <div class="space-y-3">
 
+                {% if match.status == "live" %}
+                    <div class="text-xs font-bold text-betyellow-500 uppercase live-indicator mb-2">
+                        ● LIVE
+                    </div>
+                {% else %}
+                    <div class="text-xs text-gray-400 mb-2">
+                        {{ match.kickoff|date:"d M Y, H:i" }}
+                    </div>
+                {% endif %}
+
                 <div class="flex justify-between items-center">
                     <span class="font-bold text-white text-base">
-                        Arsenal
+                        {{ match.home_team }}
                     </span>
 
-                    <span class="text-2xl font-black text-betorange-500">
-                        2
-                    </span>
+                    {% if match.status == "live" or match.status == "finished" %}
+                        <span class="text-2xl font-black text-betorange-500">
+                            {{ match.home_score }}
+                        </span>
+                    {% endif %}
                 </div>
 
                 <div class="flex justify-between items-center">
                     <span class="font-medium text-gray-300 text-base">
-                        Chelsea
+                        {{ match.away_team }}
                     </span>
 
-                    <span class="text-2xl font-black text-white">
-                        1
-                    </span>
+                    {% if match.status == "live" or match.status == "finished" %}
+                        <span class="text-2xl font-black text-white">
+                            {{ match.away_score }}
+                        </span>
+                    {% endif %}
+                </div>
+
+                <div class="text-xs text-gray-500">
+                    {{ match.competition.name }}
                 </div>
 
             </div>
         </div>
 
+        <!-- Match Result Odds -->
         <div class="xl:col-span-5">
 
             <div class="text-[10px] text-gray-500 mb-1.5 uppercase font-bold tracking-wider">
                 Match Result (1X2)
             </div>
 
-            <div class="flex gap-2">
+            {% if odds and odds.is_active %}
+                <div class="flex gap-2">
 
-                <button
-                    onclick="toggleBet('Arsenal', 'Match Result', '1.85', 'Arsenal vs Chelsea', this)"
-                    class="odd-btn flex-1 bg-betblack-900 border border-betblack-600 rounded-md py-2.5 px-3 flex justify-between items-center"
-                >
-                    <span class="text-xs text-gray-400 market-label">1</span>
-                    <span class="font-bold">1.85</span>
-                </button>
+                    <button
+                        type="button"
+                        onclick="toggleBet('{{ match.home_team|escapejs }}', 'Match Result', '{{ odds.home_win }}', '{{ match.home_team|escapejs }} vs {{ match.away_team|escapejs }}', this)"
+                        class="odd-btn flex-1 bg-betblack-900 border border-betblack-600 rounded-md py-2.5 px-3 flex justify-between items-center text-white"
+                    >
+                        <span class="text-xs text-gray-400 market-label">1</span>
+                        <span class="font-bold">{{ odds.home_win|floatformat:2 }}</span>
+                    </button>
 
-                <button
-                    onclick="toggleBet('Draw', 'Match Result', '3.40', 'Arsenal vs Chelsea', this)"
-                    class="odd-btn flex-1 bg-betblack-900 border border-betblack-600 rounded-md py-2.5 px-3 flex justify-between items-center"
-                >
-                    <span class="text-xs text-gray-400 market-label">X</span>
-                    <span class="font-bold">3.40</span>
-                </button>
+                    <button
+                        type="button"
+                        onclick="toggleBet('Draw', 'Match Result', '{{ odds.draw }}', '{{ match.home_team|escapejs }} vs {{ match.away_team|escapejs }}', this)"
+                        class="odd-btn flex-1 bg-betblack-900 border border-betblack-600 rounded-md py-2.5 px-3 flex justify-between items-center text-white"
+                    >
+                        <span class="text-xs text-gray-400 market-label">X</span>
+                        <span class="font-bold">{{ odds.draw|floatformat:2 }}</span>
+                    </button>
 
-                <button
-                    onclick="toggleBet('Chelsea', 'Match Result', '4.20', 'Arsenal vs Chelsea', this)"
-                    class="odd-btn flex-1 bg-betblack-900 border border-betblack-600 rounded-md py-2.5 px-3 flex justify-between items-center"
-                >
-                    <span class="text-xs text-gray-400 market-label">2</span>
-                    <span class="font-bold">4.20</span>
-                </button>
+                    <button
+                        type="button"
+                        onclick="toggleBet('{{ match.away_team|escapejs }}', 'Match Result', '{{ odds.away_win }}', '{{ match.home_team|escapejs }} vs {{ match.away_team|escapejs }}', this)"
+                        class="odd-btn flex-1 bg-betblack-900 border border-betblack-600 rounded-md py-2.5 px-3 flex justify-between items-center text-white"
+                    >
+                        <span class="text-xs text-gray-400 market-label">2</span>
+                        <span class="font-bold">{{ odds.away_win|floatformat:2 }}</span>
+                    </button>
 
-            </div>
+                </div>
+            {% else %}
+                <p class="text-sm text-gray-500">
+                    Odds not available yet.
+                </p>
+            {% endif %}
+
         </div>
 
+        <!-- Additional market placeholder -->
         <div class="xl:col-span-3">
-
             <div class="text-[10px] text-gray-500 mb-1.5 uppercase font-bold tracking-wider">
-                Total Goals (2.5)
+                More Markets
             </div>
 
-            <div class="flex gap-2">
-
-                <button
-                    onclick="toggleBet('Over 2.5', 'Total Goals', '1.65', 'Arsenal vs Chelsea', this)"
-                    class="odd-btn flex-1 bg-betblack-900 border border-betblack-600 rounded-md py-2.5 px-3 flex justify-between items-center"
-                >
-                    <span class="text-xs text-gray-400 market-label">Over</span>
-                    <span class="font-bold">1.65</span>
-                </button>
-
-                <button
-                    onclick="toggleBet('Under 2.5', 'Total Goals', '2.25', 'Arsenal vs Chelsea', this)"
-                    class="odd-btn flex-1 bg-betblack-900 border border-betblack-600 rounded-md py-2.5 px-3 flex justify-between items-center"
-                >
-                    <span class="text-xs text-gray-400 market-label">Under</span>
-                    <span class="font-bold">2.25</span>
-                </button>
-
+            <div class="bg-betblack-900 border border-betblack-700 rounded-md p-3 text-sm text-gray-400 text-center">
+                More betting markets coming soon
             </div>
         </div>
+
     </div>
+
+    {% endwith %}
+{% empty %}
+    <div class="p-8 text-center text-gray-400">
+        <i class="fa-solid fa-futbol text-3xl mb-3"></i>
+        <p>No upcoming or live matches available.</p>
+        <p class="text-sm mt-2">Add matches and odds through the Django admin.</p>
+    </div>
+{% endfor %}
+
 </div>
 
 {% endblock %}         sans: ['Inter', 'sans-serif'],
