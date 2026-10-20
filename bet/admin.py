@@ -1,7 +1,7 @@
 
 from django.contrib import admin
 from .models import Sport, Competition, Match
-
+from .models import Bet, BetSelection
 
 @admin.register(Sport)
 class SportAdmin(admin.ModelAdmin):
@@ -53,3 +53,42 @@ class MatchOddsAdmin(admin.ModelAdmin):
         "match__away_team",
     )
     list_select_related = ("match",)
+class BetSelectionInline(admin.TabularInline):
+    model = BetSelection
+    extra = 0
+    readonly_fields = ("odds_at_placement",)
+
+
+@admin.register(Bet)
+class BetAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "user",
+        "bet_type",
+        "stake",
+        "potential_payout",
+        "status",
+        "created_at",
+    )
+    list_filter = ("bet_type", "status", "created_at")
+    search_fields = ("user__username", "user__email")
+    readonly_fields = ("created_at",)
+    inlines = [BetSelectionInline]
+
+
+@admin.register(BetSelection)
+class BetSelectionAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "bet",
+        "match",
+        "market",
+        "selection",
+        "odds_at_placement",
+    )
+    list_filter = ("market",)
+    search_fields = (
+        "match__home_team",
+        "match__away_team",
+        "selection",
+    )
