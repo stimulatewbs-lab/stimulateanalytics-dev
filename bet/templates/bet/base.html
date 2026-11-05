@@ -434,6 +434,16 @@
                     class="w-full bg-betorange-500 hover:bg-betorange-600 text-betblack-900 font-black py-3.5 rounded-md uppercase tracking-widest transition"
                 >
                     Place Bet
+                    <form id="csrf-form" class="hidden">
+    {% csrf_token %}
+</form>
+
+<p
+    id="betMessage"
+    class="hidden text-sm mb-3"
+    role="status"
+    aria-live="polite"
+></p>
                 </button>
 
                 <div class="text-center mt-4 text-[9px] text-gray-500 uppercase tracking-widest flex justify-center gap-2 items-center">
@@ -508,36 +518,46 @@
             updateSlipUI();
         }
 
-        function toggleBet(selection, market, odds, event, element) {
-            const uniqueId = `${event}-${market}-${selection}`;
+      function toggleBet(
+    selection,
+    market,
+    odds,
+    event,
+    element,
+    matchId,
+    selectionKey
+) {
+    const uniqueId = `${matchId}-${market}-${selectionKey}`;
 
-            const existingIndex = betSlip.findIndex(
-                bet => bet.id === uniqueId
-            );
+    const existingIndex = betSlip.findIndex(
+        bet => bet.id === uniqueId
+    );
 
-            if (existingIndex > -1) {
-                betSlip.splice(existingIndex, 1);
-                element.classList.remove("selected");
-            } else {
-                betSlip.push({
-                    id: uniqueId,
-                    selection: selection,
-                    market: market,
-                    event: event,
-                    odds: parseFloat(odds),
-                    domElement: element
-                });
+    if (existingIndex > -1) {
+        betSlip.splice(existingIndex, 1);
+        element.classList.remove("selected");
+    } else {
+        betSlip.push({
+            id: uniqueId,
+            matchId: Number(matchId),
+            selectionKey: selectionKey,
+            selection: selection,
+            market: market,
+            event: event,
+            odds: parseFloat(odds),
+            domElement: element
+        });
 
-                element.classList.add("selected");
+        element.classList.add("selected");
 
-                if (betSlip.length > 1 && betType === "single") {
-                    setBetType("multiple");
-                    return;
-                }
-            }
-
-            updateSlipUI();
+        if (betSlip.length > 1 && betType === "single") {
+            setBetType("multiple");
+            return;
         }
+    }
+
+    updateSlipUI();
+}
 
         function removeBet(id) {
             const bet = betSlip.find(item => item.id === id);
@@ -680,22 +700,122 @@
             }
         }
 
-        function placeBet() {
-            if (betSlip.length === 0) {
-                alert("Please select at least one betting option.");
-                return;
-            }
+        
+async function placeBet() {
+    const button = document.querySelector(
+        'button[onclick="placeBet()"]'
+    );
 
-            const stake =
-                parseFloat(document.getElementById("globalStake").value) || 0;
+    const message = document.getElementById("betMessage");
+    const stakeInput = document.getElementById("globalStake");
 
-            if (stake <= 0) {
-                alert("Please enter a valid stake.");
-                return;
-            }
+    function showMessage(text, success = false) {
+        message.textContent = text;
 
-            alert("This is currently a UI demo. Django betting processing will be added later.");
+        message.classList.remove(
+            "hidden",
+            "text-green-400",
+            "text-red-400"
+        );
+
+        message.classList.add(
+            success ? "text-green-400" : "text-red-400"
+        );
+    }
+
+    // Check selected bets
+    if (betSlip.length === 0) {
+        showMessage("Please select at least one betting option.");
+        return;
+    }
+
+    // Check single or multiple bet
+    if (betType === "single" && betSlip.length > 1) {
+        showMessage(
+            "Choose Multiple for combined bets, or keep only one selection for a Single."
+        );
+        return;
+    }
+
+    // Validate stake
+    const stake = stakeInput.value.trim();
+    const numericStake = Number(stake);
+
+    if (
+        !stake ||
+        !Number.isFinite(numericStake) ||
+        numericStake <= 0 ||
+        !/^\d+(\.\d{1,2})?$/.test(stake)
+    ) {
+        showMessage("Enter a valid stake with up to two decimal places.");
+        return;
+    }
+
+    // Get Django CSRF token
+    const csrfInput = document.querySelector(
+        '#csrf-form [name="csrfmiddlewaretoken"]'
+    );
+
+    if (!csrfInput) {
+        showMessage("Security token unavailable. Refresh the page and try again.");
+        return;
+    }
+
+    // Prepare data for Django
+    const payload = {
+        stake: stake,
+        selections: betSlip.map(bet => ({
+            match_id: bet.matchId,
+            market: "match_result",
+            selection: bet.selectionKey
+        }))
+    };
+
+    // Disable button while submitting
+    button.disabled = true;
+    button.textContent = "Submitting...";
+    button.classList.add("opacity-60", "cursor-not-allowed");
+
+    try {
+        const response = await fetch("{% url 'place_bet' %}", {
+            method: "POST",
+            credentials: "same-origin",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": csrfInput.value,
+                "X-Requested-With": "XMLHttpRequest"
+            },
+            body: JSON.stringify(payload)
+        });
+
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+            showMessage(result.message || "Unable to place this bet.");
+            return;
         }
+
+        showMessage(
+            `Bet #${result.bet_id} saved successfully. ` +
+            `Potential payout: $${Number(result.potential_payout).toFixed(2)}`,
+            true
+        );
+
+        // Clear betslip after successful submission
+        clearSlip();
+
+    } catch (error) {
+        showMessage(
+            "Could not contact the server. Check your connection and try again."
+        );
+
+    } finally {
+        button.disabled = false;
+        button.textContent = "Place Bet";
+        button.classList.remove("opacity-60", "cursor-not-allowed");
+    }
+}
+
     </script>
 
     {% block extra_js %}{% endblock %}

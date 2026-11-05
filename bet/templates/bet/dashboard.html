@@ -132,43 +132,45 @@
             <div class="text-[10px] text-gray-500 mb-1.5 uppercase font-bold tracking-wider">
                 Match Result (1X2)
             </div>
+{% if odds and odds.is_active %}
+    <div class="flex gap-2">
 
-            {% if odds and odds.is_active %}
-                <div class="flex gap-2">
+        <!-- HOME WIN -->
+        <button
+            type="button"
+            onclick="toggleBet('{{ match.home_team|escapejs }}', 'Match Result', '{{ odds.home_win }}', '{{ match.home_team|escapejs }} vs {{ match.away_team|escapejs }}', this, {{ match.id }}, 'home_win')"
+            class="odd-btn flex-1 bg-betblack-900 border border-betblack-600 rounded-md py-2.5 px-3 flex justify-between items-center text-white"
+        >
+            <span class="text-xs text-gray-400 market-label">1</span>
+            <span class="font-bold">{{ odds.home_win|floatformat:2 }}</span>
+        </button>
 
-                    <button
-                        type="button"
-                        onclick="toggleBet('{{ match.home_team|escapejs }}', 'Match Result', '{{ odds.home_win }}', '{{ match.home_team|escapejs }} vs {{ match.away_team|escapejs }}', this)"
-                        class="odd-btn flex-1 bg-betblack-900 border border-betblack-600 rounded-md py-2.5 px-3 flex justify-between items-center text-white"
-                    >
-                        <span class="text-xs text-gray-400 market-label">1</span>
-                        <span class="font-bold">{{ odds.home_win|floatformat:2 }}</span>
-                    </button>
+        <!-- DRAW -->
+        <button
+            type="button"
+            onclick="toggleBet('Draw', 'Match Result', '{{ odds.draw }}', '{{ match.home_team|escapejs }} vs {{ match.away_team|escapejs }}', this, {{ match.id }}, 'draw')"
+            class="odd-btn flex-1 bg-betblack-900 border border-betblack-600 rounded-md py-2.5 px-3 flex justify-between items-center text-white"
+        >
+            <span class="text-xs text-gray-400 market-label">X</span>
+            <span class="font-bold">{{ odds.draw|floatformat:2 }}</span>
+        </button>
 
-                    <button
-                        type="button"
-                        onclick="toggleBet('Draw', 'Match Result', '{{ odds.draw }}', '{{ match.home_team|escapejs }} vs {{ match.away_team|escapejs }}', this)"
-                        class="odd-btn flex-1 bg-betblack-900 border border-betblack-600 rounded-md py-2.5 px-3 flex justify-between items-center text-white"
-                    >
-                        <span class="text-xs text-gray-400 market-label">X</span>
-                        <span class="font-bold">{{ odds.draw|floatformat:2 }}</span>
-                    </button>
+        <!-- AWAY WIN -->
+        <button
+            type="button"
+            onclick="toggleBet('{{ match.away_team|escapejs }}', 'Match Result', '{{ odds.away_win }}', '{{ match.home_team|escapejs }} vs {{ match.away_team|escapejs }}', this, {{ match.id }}, 'away_win')"
+            class="odd-btn flex-1 bg-betblack-900 border border-betblack-600 rounded-md py-2.5 px-3 flex justify-between items-center text-white"
+        >
+            <span class="text-xs text-gray-400 market-label">2</span>
+            <span class="font-bold">{{ odds.away_win|floatformat:2 }}</span>
+        </button>
 
-                    <button
-                        type="button"
-                        onclick="toggleBet('{{ match.away_team|escapejs }}', 'Match Result', '{{ odds.away_win }}', '{{ match.home_team|escapejs }} vs {{ match.away_team|escapejs }}', this)"
-                        class="odd-btn flex-1 bg-betblack-900 border border-betblack-600 rounded-md py-2.5 px-3 flex justify-between items-center text-white"
-                    >
-                        <span class="text-xs text-gray-400 market-label">2</span>
-                        <span class="font-bold">{{ odds.away_win|floatformat:2 }}</span>
-                    </button>
-
-                </div>
-            {% else %}
-                <p class="text-sm text-gray-500">
-                    Odds not available yet.
-                </p>
-            {% endif %}
+    </div>
+{% else %}
+    <p class="text-sm text-gray-500">
+        Odds not available yet.
+    </p>
+{% endif %}
 
         </div>
 
@@ -368,10 +370,32 @@
 
             <!-- Time/Status Filter Tabs -->
             <div class="flex gap-1 border-b border-betblack-700 mb-6 bg-betblack-800 p-1 rounded-t-lg inline-flex">
-                <button class="px-5 py-1.5 bg-betblack-600 text-white rounded shadow text-sm font-semibold transition">Live Now</button>
-                <button class="px-5 py-1.5 text-gray-400 hover:text-white rounded text-sm font-medium transition">Upcoming</button>
-                <button class="px-5 py-1.5 text-gray-400 hover:text-white rounded text-sm font-medium transition">Outrights</button>
-            </div>
+
+    <button
+        type="button"
+        onclick="switchMatchTab('live', this)"
+        class="match-tab px-5 py-1.5 bg-betblack-600 text-white rounded shadow text-sm font-semibold transition"
+    >
+        Live Now
+    </button>
+
+    <button
+        type="button"
+        onclick="switchMatchTab('upcoming', this)"
+        class="match-tab px-5 py-1.5 text-gray-400 hover:text-white rounded text-sm font-medium transition"
+    >
+        Upcoming
+    </button>
+
+    <button
+        type="button"
+        onclick="switchMatchTab('outrights', this)"
+        class="match-tab px-5 py-1.5 text-gray-400 hover:text-white rounded text-sm font-medium transition"
+    >
+        Outrights
+    </button>
+
+</div>
 
             <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
                 <i class="fa-solid fa-circle text-betyellow-500 text-xs live-indicator"></i> Live Football
@@ -391,7 +415,8 @@
                 </div>
                 
                 <!-- Main Body -->
-                <div class="p-4 grid grid-cols-1 xl:grid-cols-12 gap-4 items-center">
+                <div class="match-card p-4 grid grid-cols-1 xl:grid-cols-12 gap-4 items-center"
+    data-status="{{ match.status }}">
                     
                     <!-- Teams & Score -->
                     <div class="col-span-1 xl:col-span-4 pr-4 xl:border-r border-betblack-700">
@@ -452,7 +477,10 @@
                     <span class="flex items-center gap-2"><i class="fa-solid fa-trophy text-betblack-600"></i> La Liga</span>
                     <span>Today, 20:45</span>
                 </div>
-                <div class="p-4 grid grid-cols-1 xl:grid-cols-12 gap-4 items-center">
+               <div
+    class="match-card p-4 grid grid-cols-1 xl:grid-cols-12 gap-4 items-center"
+    data-status="{{ match.status }}"
+>
                     <div class="col-span-1 xl:col-span-4 pr-4 xl:border-r border-betblack-700">
                         <div class="space-y-3">
                             <div class="flex justify-between items-center"><span class="font-medium text-white">Real Madrid</span><span>-</span></div>

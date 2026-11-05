@@ -2,7 +2,7 @@
 from django.shortcuts import render
 from .models import Match
 
-
+from django.contrib.auth.decorators import login_required
 import json
 from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
 
