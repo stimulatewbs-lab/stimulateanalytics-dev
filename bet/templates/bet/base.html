@@ -1,9 +1,9 @@
-{% load static %}
+% load static %}
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>{% block title %}BetPro - Django Sportsbook{% endblock %}</title>
 
@@ -815,7 +815,46 @@ async function placeBet() {
         button.classList.remove("opacity-60", "cursor-not-allowed");
     }
 }
+// Switch between Live, Upcoming and Outrights tabs
+function switchMatchTab(tab, button) {
 
+    const cards = document.querySelectorAll('.match-card');
+    const tabs = document.querySelectorAll('.match-tab');
+
+    // Update tab appearance
+    tabs.forEach(tabButton => {
+        tabButton.classList.remove(
+            'bg-betblack-600',
+            'text-white',
+            'shadow'
+        );
+
+        tabButton.classList.add('text-gray-400');
+    });
+
+    button.classList.add(
+        'bg-betblack-600',
+        'text-white',
+        'shadow'
+    );
+
+    button.classList.remove('text-gray-400');
+
+    // Show or hide match cards
+    cards.forEach(card => {
+
+        if (tab === 'outrights') {
+            card.classList.add('hidden');
+        } else {
+            card.classList.toggle(
+                'hidden',
+                card.dataset.status !== tab
+            );
+        }
+
+    });
+
+}
     </script>
 
     {% block extra_js %}{% endblock %}
